@@ -8,6 +8,28 @@
 <h1> Array Intro </h1>
 
 <script>
+    let arrUsers =[
+        {name: "Katya", age: 25},
+        {name: "Sasha", age: 25},
+        {name: "Nika", age: 26},
+        {name: "Alex", age: 27},
+        {name: "Vlad", age: 28},
+    ]
+
+    arrUsers.sort((a,b) => a.age - b.age);
+
+    console.log(arrUsers);
+
+    let sasha = arrUsers.find(user => user.name === "Sasha");
+    console.log(sasha);
+
+    // let sashaIndex = arrUsers.indexOf({name: "Sasha", age: 25});
+    // console.log(sashaIndex);
+
+
+</script>
+
+<script>
     // let arrNames = ["Sasha", "Nika", "Alex", "Vlad", "Sasha", "Vladimir", "Sasha"];
     //
     // if (arrNames.includes("Sasha")) {
