@@ -5,9 +5,26 @@
     <title>Arrays Intro</title>
 </head>
 <body>
+<h1> Array Intro </h1>
 
 <script>
+    let arr = [1,true,3.4,"keeper",NaN,{login: "keeper"},undefined,8,()=>{console.log("Hello")},10];
 
+
+    arr.key1 = "value1";
+    arr.key2 = "value2";
+
+    arr[100] = "value100";
+    arr[1000] = "value1000";
+
+    console.log(arr);
+
+    console.log(arr.length);
+    console.log(arr[1]);
+    console.log(arr["key1"]);
+
+    let arr2 = new Array(1,2,3,4,5);
+    console.log(arr2);
 </script>
 
 </body>
