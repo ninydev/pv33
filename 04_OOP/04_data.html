@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<input type="date" id="date">
+
+<script>
+    let date = new Date();
+    console.log(date);
+    console.log(typeof date);
+
+    let date2 = new Date(2020, 1, 1, 10, 10, 10);
+    console.log(date2);
+
+    let date3 = new Date(2020, 1, 1, 10, 10, 10, 100);
+    console.log(date3);
+
+    console.log(date.getFullYear());
+    console.log(date.getMonth());
+    console.log(date.getDate());
+
+    console.log(date.getHours());
+    console.log(date.getMinutes());
+    console.log(date.getSeconds());
+    console.log(date.getMilliseconds());
+
+    console.log(date.getTime());
+
+    console.log(date.toString());
+
+    console.log(date.toDateString());
+    console.log(date.toTimeString());
+    console.log(date.toLocaleDateString());
+    console.log(date.toLocaleTimeString());
+    console.log(date.toLocaleString());
+    console.log(date.toUTCString());
+
+    console.log(date.getDay());
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script>
+
+    const celebrateBirthday = user => ({
+        ...user,
+        age: user.age + 1
+    });
+
+    // Функциональный Builder для пользователя
+
+    const createUserBuilder = () => {
+        const props = {};
+        return {
+            setName: name => createUserBuilderWith({ ...props, name }),
+            setAge: age => createUserBuilderWith({ ...props, age }),
+            setCity: city => createUserBuilderWith({ ...props, city }),
+            setJob: job => createUserBuilderWith({ ...props, job }),
+            build: () => ({ ...props })
+        };
+        function createUserBuilderWith(newProps) {
+            return {
+                setName: name => createUserBuilderWith({ ...newProps, name }),
+                setAge: age => createUserBuilderWith({ ...newProps, age }),
+                setCity: city => createUserBuilderWith({ ...newProps, city }),
+                setJob: job => createUserBuilderWith({ ...newProps, job }),
+                build: () => ({ ...newProps })
+            };
+        }
+    };
+
+    // Пример использования:
+    const user1 = createUserBuilder()
+        .setName("John")
+        .setAge(25)
+        .setCity("New York")
+        .setJob("Software Engineer")
+        .build();
+
+    let user2 = {
+        name: "John",
+        age: 25,
+        city: "New York",
+        job: "Software Engineer"
+    }
+
+    user2.age++;
+
+    celebrateBirthday( user1)
+
+    console.log(user1)
+    console.log(user2)
+
+
+
+
+
+</script>
+
+</body>
+</html>
