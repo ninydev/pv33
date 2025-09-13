@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<script>
+    let user = {
+        name: 'John',
+        age: 25,
+        city: 'New York'
+    };
+
+    console.log(user.name);
+    console.log(user['name']);
+
+    class User {
+        constructor(name, age, city) {
+            this.name = name;
+            this.age = age;
+            this.city = city;
+        }
+
+        greet() {
+            console.log(`Hello, my name is ${this.name}, I'm ${this.age} years old and I live in ${this.city}.`);
+        }
+    }
+
+    let john = new User('John', 25, 'New York');
+    john.greet();
+</script>
+</body>
+</html>
