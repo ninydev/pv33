@@ -14,14 +14,26 @@
         city: 'New York'
     };
 
-    console.log(user.name);
-    console.log(user['name']);
-
     class User {
+
+        checkPassword(pass) {
+            return this.#password === pass;
+        }
+
+        #password;
+        get password() {
+            return this.#password;
+        }
+
+        set password(pass) {
+            this.#password = pass;
+        }
+
         constructor(name, age, city) {
             this.name = name;
             this.age = age;
             this.city = city;
+            this.#password = 'QweAsdZxc!23';
         }
 
         greet() {
@@ -29,8 +41,43 @@
         }
     }
 
-    let john = new User('John', 25, 'New York');
-    john.greet();
+    let user1 = new User('John', 25, 'New York');
+    console.log(user1);
+
+    user1.greet();
+
+    let user2 = Object.create(Object.getPrototypeOf(user1));
+    console.log(user2);
+
+
+
+    // function createUser(name, age, city) {
+    //     return {
+    //         name: name,
+    //         age: age,
+    //         city: city,
+    //         greet: function() {
+    //             console.log(`Hello, my name is ${this.name}, I'm ${this.age} years old and I live in ${this.city}.`);
+    //         }
+    //     };
+    //
+    // }
+    //
+    // let john = new User('John', 25, 'New York');
+    // console.log(john.name);
+    // john.greet();
+    // let jane = createUser('Jane', 30, 'Los Angeles');
+    // console.log(jane);
+    // jane.greet();
+    //
+    // console.log(typeof (User));
+
+    // console.log(typeof (user));
+    // console.log( user);
+    // console.log(user.constructor.name); // Object
+    // console.log(typeof (user));
+    // console.log( john);
+    // console.log(john.constructor.name); // User
 </script>
 </body>
 </html>

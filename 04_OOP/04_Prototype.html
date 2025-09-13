@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<script>
+
+    let arr1 = [1,2,3,4,5];
+
+    // Опис тут
+    Array.prototype.myFunction = function(){
+        return this.join('-');
+    }
+
+    let arr2 = ['a','b','c','d','e'];
+    let arr3 = [true,false,true,false,true];
+
+    // arr1.myFunction = function(){
+    //     return this.join('-');
+    // }
+
+    console.log(arr1.myFunction());
+    console.log(arr2.myFunction());
+    console.log(arr3.myFunction());
+</script>
+</body>
+</html>

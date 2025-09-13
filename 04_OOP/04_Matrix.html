@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<script>
+
+    /**
+     * Метод eduFlyHelicopter
+     * Позволяет обучить любой объект летать на вертолете
+     * @returns {(function(): void)|*}
+     */
+    function eduFlyHelicopter() {
+
+        return function () {
+            console.log('eduFlyHelicopter');
+        }
+    }
+
+    let Trinity = {
+        name: 'Trinity',
+    };
+
+    Trinity.fly = eduFlyHelicopter();
+
+    let Neo = {
+        name: 'Neo',
+    };
+
+    let Morpheus = {
+        name: 'Morpheus',
+    };
+
+    console.log(Trinity)
+
+
+
+
+
+
+    
+</script>
+</body>
+</html>
