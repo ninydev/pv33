@@ -6,6 +6,16 @@
 </head>
 <body>
 
+<div id="dashboard">
+    <label> Array Size: <input type="number" id="arrSize" ></label><br>
+    <label> Array Min: <input type="number" id="arrMin" ></label><br>
+    <label> Array Max: <input type="number" id="arrMax" ></label><br>
+</div>
+
+<div id="arr">
+
+</div>
+
 
 <script>
     const arr = [];
@@ -14,9 +24,52 @@
     let arMax = 20;
 
     /**
+     * !!! ТАК НЕ РОБИТИ !!!
+     * Adds element to the array by index
+     * @param index
+     * @param value
+     */
+    function addElementByIndex(index, value) {
+        arr[index] = value;
+    }
+
+    /**
+     * !!! ТАК НЕ РОБИТИ !!!
+     * Removes element from the array by index
+     * @param index
+     */
+    function removeElementByIndex(index) {
+        arr.splice(index, 1);
+    }
+
+
+
+    document.getElementById('arrSize').addEventListener('change', function () {
+        if (this.value < 1) {
+            this.value = 1;
+        }
+        arrSize = this.value;
+        fillArr();
+        printArrToConsole(arr);
+    })
+
+    // document.getElementById('arrMin').addEventListener('change', function () {
+    //     arMin = this.value;
+    //     fillArr();
+    //     printArrToConsole(arr);
+    // })
+    //
+    // document.getElementById('arrMax').addEventListener('change', function () {
+    //     arMax = this.value;
+    //     fillArr();
+    //     printArrToConsole(arr);
+    // })
+
+    /**
      * Fills the array with random numbers
      */
     function fillArr() {
+        arr.length = 0;
         for (let i = 0; i < arrSize; i++) {
             arr[i] = Math.floor(Math.random() * (arMax - arMin + 1)) + arMin;
         }
