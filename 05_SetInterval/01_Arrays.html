@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<script>
+    const arr = [];
+    let arrSize = 10;
+    let arMin = 1;
+    let arMax = 20;
+
+    /**
+     * Fills the array with random numbers
+     */
+    function fillArr() {
+        for (let i = 0; i < arrSize; i++) {
+            arr[i] = Math.floor(Math.random() * (arMax - arMin + 1)) + arMin;
+        }
+    }
+
+    /**
+     * Prints the array to the console
+     * @param arr
+     */
+    function printArrToConsole(arr) {
+        console.log(arr);
+    }
+
+    /**
+     * !!! ТАК НЕ РОБИТИ !!!
+     * Prints the array to the body
+     * @param arr
+     */
+    function printArrToBody(arr) {
+        document.body.innerHTML += arr + '<br>';
+    }
+
+    /**
+     * Prints the even elements of the array
+     * @param arr
+     */
+    function printArrEvenElements(arr) {
+        arr.forEach(function (element) {
+            if (element % 2 === 0) {
+                 console.log(element);
+             }
+        })
+    }
+
+    /**
+     * Returns the sum of the array elements
+     * @param arr - array of numbers
+     * @returns {number} - sum of the array elements
+     */
+    function getArrSum(arr) {
+        let sum = 0;
+        arr.forEach(function (element) {
+            sum += element;
+        })
+        return sum;
+    }
+
+
+    /**
+     * !!! ТАК НЕ РОБИТИ !!!
+     * Prints the min element of the global array
+     */
+    function Task11() {
+        let min = arr[0];
+        arr.forEach(function (element) {
+            if (element < min) {
+                min = element;
+            }
+        })
+        console.log(min);
+    }
+
+
+    /**
+     * Returns the max element of the array
+     * @param arr
+     * @returns {number}
+     */
+    function getArrMax(arr) {
+        let max = arr[0];
+        arr.forEach(function (element) {
+            if (element > max) {
+                max = element;
+            }
+        })
+        return max;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+</body>
+</html>
