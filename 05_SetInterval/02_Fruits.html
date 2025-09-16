@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fruits</title>
+</head>
+<body>
+
+<h1> Fruits </h1>
+
+<div id="dashboard">
+    <label>
+        Search: <input type="text" id="search" value="oldSearch">
+        <span id="resultSearch"></span>
+    </label><br>
+</div>
+
+<hr>
+
+<div id="result">
+    <ul id="fruits">
+    </ul>
+</div>
+
+
+<script>
+
+    document.getElementById('search')
+        .addEventListener('input', (e) => {
+            // const searchFromThis = this.value;
+            // console.log(searchFromThis);
+            console.log(e);
+
+            // Подія - Елемент (input) - Значення (value)
+            const searchFromEvent = e.target.value;
+            console.log(searchFromEvent);
+
+
+
+            const index = searchFruitIndex(searchFromEvent);
+            const resultSearch = document.getElementById('resultSearch');
+            if (index === -1) {
+                resultSearch.textContent = 'Not found';
+            } else {
+                resultSearch.textContent = `Found: ${index} ${fruits[index]}`;
+            }
+        })
+
+    // Знайти елемент з id 'fruits', там буде список фруктів
+    const fruitsList = document.getElementById('fruits');
+
+    const fruits = ['Apple', 'Banana', 'Orange', 'Mango', 'Pineapple', 'Grapes', 'Strawberry', 'Watermelon', 'Pear', 'Cherry'];
+
+    /**
+     * Пошук індексу фрукта в масиві fruits
+     * @param name
+     * @returns {number}
+     */
+    function searchFruitIndex(name) {
+        return fruits.findIndex(
+            fruit => fruit.toLowerCase()
+                === name.toLowerCase()
+        );
+
+    }
+
+    /**
+     * Побудувати ul з фруктами
+     */
+    function renderFruits() {
+        // Очистити усі теги у тому елементі
+        fruitsList.innerHTML = '';
+
+        // Пройтися по масиву fruits і для кожного фрукта створити тег <li> з назвою фрукта
+        for (let fruit of fruits) {
+            const li = document.createElement('li');
+            li.textContent = fruit;
+            fruitsList.appendChild(li);
+        }
+    }
+
+    renderFruits();
+
+
+</script>
+</body>
+</html>
