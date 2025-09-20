@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+</head>
+<body>
+<header>
+    <h1> Binding </h1>
+</header>
+
+<div>
+    <img src="" alt="" id="avatar" width="50" style="border-radius: 50%; vertical-align: middle;">
+    <h2 id="name"></h2>
+    <p id="age"></p>
+</div>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+
+    /**
+     * DOM - Document Object Model
+     * Посилання на HTMLElement
+     * @type {HTMLElement}
+     */
+    let avatarView = document.getElementById('avatar');
+    let nameView = document.getElementById('name');
+    let ageView = document.getElementById('age');
+
+
+    /**
+     * Model
+     * @type {{id: number, avatar: string, name: string, age: number}}
+     */
+    let userModel = {
+        id: 1,
+        avatar: 'https://avatars.githubusercontent.com/u/10101010?v=4',
+        name: 'John',
+        age: 25,
+
+        setName(name) {
+            this.name = name;
+            updateUserDataFromSource();
+        },
+        setAge(age) {
+            this.age = age;
+            updateUserDataFromSource();
+        }
+    }
+
+    /**
+     * Oneway binding (easy mode)
+     */
+    function updateUserDataFromSource() {
+        avatarView.src = userModel.avatar;
+        nameView.textContent = userModel.name;
+        ageView.textContent = userModel.age;
+    }
+
+
+    document.body.onload = function () {
+        console.log('DOM loaded');
+        updateUserDataFromSource();
+    }
+
+</script>
+
+
+</body>
+</html>
