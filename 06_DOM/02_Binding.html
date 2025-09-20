@@ -14,7 +14,10 @@
 <div>
     <img src="" alt="" id="avatar" width="50" style="border-radius: 50%; vertical-align: middle;">
     <h2 id="name"></h2>
+    <p><label>Change name (One way to Source): <input type="text" id="inputName"></label></p>
     <p id="age"></p>
+    <p><label>Change age (Two way): <input type="text" id="inputAge"></label></p>
+
 </div>
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
@@ -28,6 +31,20 @@
     let avatarView = document.getElementById('avatar');
     let nameView = document.getElementById('name');
     let ageView = document.getElementById('age');
+    let inputName = document.getElementById('inputName');
+    let inputAge = document.getElementById('inputAge');
+
+    inputAge.oninput = function (e) {
+        userModel.setAge(e.target.value);
+    }
+
+
+    /**
+     * One-way to source binding (easy mode)
+     */
+    inputName.oninput = function (e) {
+        userModel.setName(e.target.value);
+    }
 
 
     /**
@@ -57,6 +74,9 @@
         avatarView.src = userModel.avatar;
         nameView.textContent = userModel.name;
         ageView.textContent = userModel.age;
+
+        // Потрібно для Two way binding
+        inputAge.value = userModel.age;
     }
 
 
