@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+</head>
+<body>
+<header>
+    <h1> Binding </h1>
+</header>
+
+<div>
+    <img src="" alt="" id="avatar" width="50" style="border-radius: 50%; vertical-align: middle;">
+    <h2 id="name"></h2>
+    <p><label>Change name (One way to Source): <input type="text" id="inputName"></label></p>
+    <p id="age"></p>
+    <p><label>Change age (Two way): <input type="text" id="inputAge"></label></p>
+
+</div>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+
+<script>
+    /**
+     * View bindings
+     */
+    const avatarView = document.getElementById('avatar');
+    const nameView = document.getElementById('name');
+    const ageView = document.getElementById('age');
+    const inputName = document.getElementById('inputName');
+    const inputAge = document.getElementById('inputAge');
+
+    /**
+     * Функция для обновления View
+     */
+    function updateView(prop, value) {
+        switch (prop) {
+            case "avatar":
+                avatarView.src = value;
+                break;
+            case "name":
+                nameView.textContent = value;
+                inputName.value = value; // для two-way binding
+                break;
+            case "age":
+                ageView.textContent = value;
+                inputAge.value = value; // для two-way binding
+                break;
+        }
+    }
+
+    /**
+     * Модель с Proxy
+     */
+    const userModel = new Proxy({
+        id: 1,
+        avatar: "https://avatars.githubusercontent.com/u/10101010?v=4",
+        name: "John",
+        age: 25
+    }, {
+        set(target, prop, value) {
+            target[prop] = value;
+            updateView(prop, value); // автоматическая синхронизация
+            return true;
+        }
+    });
+
+    /**
+     * Event listeners (обновляют модель)
+     */
+    inputName.oninput = e => userModel.name = e.target.value;
+    inputAge.oninput = e => userModel.age = e.target.value;
+
+    /**
+     * Первичная инициализация View
+     */
+    for (let key in userModel) {
+        updateView(key, userModel[key]);
+    }
+</script>
+
+
+</body>
+</html>
