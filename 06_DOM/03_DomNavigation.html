@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+</head>
+<body>
+
+<h1> DOM Navigation </h1>
+<div id="dashboard"></div>
+<main id="content">
+    <ul>
+        <li>First</li>
+        <li>Second</li>
+        <li>Third
+            <ol>
+                <li>Third.1</li>
+                <li>Third.2
+                    <ul id="subMenu">
+                        <li>Third.2.1</li>
+                        <li>Third.2.2</li>
+                        <li>Third.2.3</li>
+                    </ul>
+                </li>
+                <li>Third.3</li>
+            </ol>
+        </li>
+        <li>Fourth</li>
+        <li>Fifth</li>
+        <li>Sixth</li>
+        <li>Seventh</li>
+        <li>Eighth</li>
+        <li>Ninth</li>
+        <li>Tenth</li>
+        <li>Eleventh</li>
+        <li>Last</li>
+    </ul>
+</main>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+
+    document.getElementById('subMenu').onclick = function (event) {
+        Toastify({
+            text: "SubMenu Clicked",
+            className: "info",
+            style: {
+                background: "linear-gradient(to left, #ff0000, #ffff00)",
+            },
+            duration: 2000,
+            close: true,
+            gravity: "top",
+            position: "right",
+            stopOnFocus: true,
+        }).showToast();
+    }
+
+    const mainContent = document.getElementById('content');
+
+    // console.log(mainContent.children);
+
+    mainContent.onclick = function (event) {
+        console.log(event.target);
+        const parent = event.target.parentElement;
+        console.log(parent);
+
+        if(parent !== null){
+            const txt = parent.tagName + "\n\n " // + parent.innerText;
+                // parent.textContent.trim();
+            console.log("Click at: " + Date().toLowerCase());
+            Toastify({
+                text: txt,
+                className: "info",
+                style: {
+                    background: "linear-gradient(to left, #00b09b, #96c93d)",
+                },
+                duration: 2000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                stopOnFocus: true,
+            }).showToast();
+        }
+    }
+
+
+
+
+
+    function logChildren(element) {
+        console.log(element.children);
+        if(element.textContent!== undefined){
+            Toastify({
+                text: element.textContent.trim(),
+                className: "info",
+                style: {
+                    background: "linear-gradient(to left, #00b09b, #96c93d)",
+                },
+                duration: 2000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                stopOnFocus: true,
+            }).showToast();
+        }
+
+        for (let child of element.children) {
+            logChildren(child);
+        }
+    }
+
+    // // Bad practice
+    // // logChildren(mainContent);
+    //
+    // /**
+    //  * Good practice
+    //  */
+    // document.body.onload = function () {
+    //     logChildren(mainContent)
+    // }
+
+
+
+
+
+</script>
+
+
+</body>
+</html>
