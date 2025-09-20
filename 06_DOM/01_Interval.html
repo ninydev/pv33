@@ -18,9 +18,57 @@
 
 
 <script>
+
+    setTimeout(()=> {
+        Toastify({
+            text: "Page loaded",
+            className: "info",
+            style: {
+                background: "linear-gradient(to left, #00b09b, #96c93d)",
+            },
+            duration: 3000,
+            close: true,
+            gravity: "top",
+            position: "right",
+            stopOnFocus: true,
+        }).showToast();
+    }, 2000)
+
     let i = 0;
 
     let intervalId = null;
+
+    document.getElementById("btnStop").onclick = function () {
+
+        if (intervalId === null) {
+            Toastify({
+                text: "Iterator is not running!",
+                className: "error",
+                style: {
+                    background: "linear-gradient(to right, #ff5555, #f00)",
+                }
+            }).showToast();
+            return;
+        }
+
+        clearInterval(intervalId);
+        intervalId = null;
+
+        Toastify({
+            text: "Iterator stopped!",
+            className: "info",
+            style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+            },
+            duration: 3000,
+            close: true,
+            gravity: "top",
+            position: "right",
+            stopOnFocus: true,
+        }).showToast();
+
+
+    };
 
     /**
      * Встановити запуск функції start по кліку на кнопку
@@ -54,6 +102,12 @@
                     background: "linear-gradient(to right, #00b09b, #96c93d)",
                 }
             }).showToast();
+
+            // Заблокувати JS на 10 секунд
+            if (i === 4) {
+                let timeNow = new Date();
+                while (new Date() - timeNow < 10000){}
+            }
         }, 1000);
     }
 
