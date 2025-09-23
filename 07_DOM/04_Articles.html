@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="dashboard">
+    <ul>
+        <li id="cmdFindByTag"></li>
+        <li id="cmdFindByLikesCount"></li>
+        <li id="cmdFindByCommentsCount"></li>
+        <li id="cmdFindByAuthor"></li>
+        <li id="cmdFindOlderThenDate"></li>
+        <li id="cmdShowAll"></li>
+    </ul>
+</div>
+
+<main class="blog">
+    <article class="post">
+        <header class="post-header">
+            <img src="https://placehold.co/600x300" alt="thumbnail" class="post-thumb">
+            <h2 class="post-title">Статья 1</h2>
+            <div class="post-meta">
+                <span class="post-author">Автор: John Doe</span>
+                <span class="post-date">01.09.2025</span>
+                <span class="post-tags">#javascript #web</span>
+            </div>
+        </header>
+        <p class="post-content">
+            Краткое описание статьи или вводный текст...
+        </p>
+        <footer class="post-footer">
+            <span class="post-likes">❤️ 25</span>
+            <span class="post-comments">💬 12</span>
+        </footer>
+    </article>
+
+    <article class="post">
+        <header class="post-header">
+            <img src="https://placehold.co/600x300" alt="thumbnail" class="post-thumb">
+            <h2 class="post-title">Статья 2</h2>
+            <div class="post-meta">
+                <span class="post-author">Автор: Jane Smith</span>
+                <span class="post-date">05.09.2025</span>
+                <span class="post-tags">#css #design</span>
+            </div>
+        </header>
+        <p class="post-content">
+            Краткое описание статьи или вводный текст...
+        </p>
+        <footer class="post-footer">
+            <span class="post-likes">❤️ 40</span>
+            <span class="post-comments">💬 8</span>
+        </footer>
+    </article>
+
+    <article class="post">
+        <header class="post-header">
+            <img src="https://placehold.co/600x300" alt="thumbnail" class="post-thumb">
+            <h2 class="post-title">Статья 3</h2>
+            <div class="post-meta">
+                <span class="post-author">Автор: Alex Brown</span>
+                <span class="post-date">10.09.2025</span>
+                <span class="post-tags">#html #semantics</span>
+            </div>
+        </header>
+        <p class="post-content">
+            Краткое описание статьи или вводный текст...
+        </p>
+        <footer class="post-footer">
+            <span class="post-likes">❤️ 15</span>
+            <span class="post-comments">💬 4</span>
+        </footer>
+    </article>
+
+    <article class="post">
+        <header class="post-header">
+            <img src="https://placehold.co/600x300" alt="thumbnail" class="post-thumb">
+            <h2 class="post-title">Статья 4</h2>
+            <div class="post-meta">
+                <span class="post-author">Автор: Emily Johnson</span>
+                <span class="post-date">12.09.2025</span>
+                <span class="post-tags">#react #frontend</span>
+            </div>
+        </header>
+        <p class="post-content">
+            Краткое описание статьи или вводный текст...
+        </p>
+        <footer class="post-footer">
+            <span class="post-likes">❤️ 60</span>
+            <span class="post-comments">💬 20</span>
+        </footer>
+    </article>
+
+    <article class="post">
+        <header class="post-header">
+            <img src="https://placehold.co/600x300" alt="thumbnail" class="post-thumb">
+            <h2 class="post-title">Статья 5</h2>
+            <div class="post-meta">
+                <span class="post-author">Автор: Chris Lee</span>
+                <span class="post-date">15.09.2025</span>
+                <span class="post-tags">#backend #nodejs</span>
+            </div>
+        </header>
+        <p class="post-content">
+            Краткое описание статьи или вводный текст...
+        </p>
+        <footer class="post-footer">
+            <span class="post-likes">❤️ 33</span>
+            <span class="post-comments">💬 11</span>
+        </footer>
+    </article>
+
+    <article class="post">
+        <header class="post-header">
+            <img src="https://placehold.co/600x300" alt="thumbnail" class="post-thumb">
+            <h2 class="post-title">Статья 6</h2>
+            <div class="post-meta">
+                <span class="post-author">Автор: Anna Taylor</span>
+                <span class="post-date">20.09.2025</span>
+                <span class="post-tags">#ai #ml</span>
+            </div>
+        </header>
+        <p class="post-content">
+            Краткое описание статьи или вводный текст...
+        </p>
+        <footer class="post-footer">
+            <span class="post-likes">❤️ 77</span>
+            <span class="post-comments">💬 25</span>
+        </footer>
+    </article>
+</main>
+
+
+<script>
+
+    /**
+     * Завдання.
+     * 1. Реалізувати функціонал кнопок в #dashboard для фільтрації статей
+     * 2. Використовувати методи DOM для пошуку елементів
+     * 3. Фільтрація має бути клікабельною
+     * 4. Показувати/приховувати статті використовуючи стилі (display: none/block)
+     */
+
+
+    // Шукати по тегу
+    document.getElementById('cmdFindByTag').onclick = function () {
+    };
+
+    // Шукати по кількості лайків
+    document.getElementById('cmdFindByLikesCount').onclick = function () {
+    };
+
+    // Шукати по кількості коментарів
+    document.getElementById('cmdFindByCommentsCount').onclick = function () {
+    };
+
+    // Шукати по автору
+    document.getElementById('cmdFindByAuthor').onclick = function () {
+    };
+
+    // Шукати по даті (старші за вказану дату)
+    document.getElementById('cmdFindOlderThenDate').onclick = function () {
+    };
+
+    // Показати всі статті
+    document.getElementById('cmdShowAll').onclick = function () {
+        let articles = document.getElementsByClassName('post');
+        articles.forEach(article => {
+            article.style.display = 'block';
+        })
+    };
+
+</script>
+</body>
+</html>
