@@ -2,11 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>User Table</title>
 </head>
 <body>
 
-<table>
+<div id="dashboard">
+    <ul>
+        <li id="cmdMarkUsers"> Mark Users </li>
+        <li id="cmdFindOlder"> Find Older </li>
+    </ul>
+</div>
+
+<table id="userTable">
     <thead>
     <tr>
         <th>ID</th>
@@ -81,6 +88,52 @@
     </tfoot>
 </table>
 
+
+<script>
+
+    document.getElementById('cmdFindOlder').onclick = function (event) {
+        // Знайти всіх користувачів старших за 30 років
+        let currentYear = new Date().getFullYear();
+        let userRows = document.querySelectorAll('#userTable tbody tr');
+
+
+        userRows.forEach(row => {
+            // Властывості рядка row.cells - повертає колекцію всіх ячеєк (td) в рядку
+            // row.cells[4] - пята ячейка (дата народження)
+            // let birthDate = row.cells[4].innerText; // Дата народження у форматі YYYY-MM-DD
+
+            // lastChild - повертає останній дочірній елемент
+            let birthDate = row.lastElementChild.textContent; // Дата народження у форматі YYYY-MM-DD
+
+            // console.log(row.firstElementChild);
+            // console.log(row.lastElementChild);
+
+            // Розділити рядок по символу '-' і взяти перший елемент (рік народження)
+            let birthYear = parseInt(birthDate.split('-')[0]);
+            let age = currentYear - birthYear;
+            if (age > 31) {
+                row.style.fontWeight = 'bold'; // Виділити жирним шрифтом
+            }
+        })
+    }
+
+    document.getElementById('cmdMarkUsers').onclick = function (event) {
+        // Виділити всі рядки з чоловіками
+        let menRows = document.querySelectorAll('.men');
+        menRows.forEach(men => {
+            men.style.background = 'lightblue';
+        })
+
+        // Виділити всі рядки з жінками
+        let womenRows = document.querySelectorAll('.women');
+        womenRows.forEach(women => {
+            women.style.background = 'lightpink';
+        })
+    }
+
+
+
+</script>
 
 </body>
 </html>
