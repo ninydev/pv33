@@ -3,16 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        .post {
+            border: 1px solid #ccc;
+            padding: 16px;
+            margin-bottom: 16px;
+            width: 30%;
+            float: left;
+        }
+
+        .post-thumb {
+            width: 100%;
+            height: auto;
+        }
+    </style>
 </head>
 <body>
 <div id="dashboard">
     <ul>
         <li id="cmdFindByTag"></li>
-        <li id="cmdFindByLikesCount"></li>
+        <li id="cmdFindByLikesCount"> Show where likes more 30 </li>
         <li id="cmdFindByCommentsCount"></li>
         <li id="cmdFindByAuthor"></li>
         <li id="cmdFindOlderThenDate"></li>
-        <li id="cmdShowAll"></li>
+        <li id="cmdShowAll"> Show all (clear filters) </li>
     </ul>
 </div>
 
@@ -150,6 +164,21 @@
 
     // Шукати по кількості лайків
     document.getElementById('cmdFindByLikesCount').onclick = function () {
+        const likesThreshold = 30; // Поріг кількості лайків
+
+        // Знайти всі елементи з класом .post-likes всередині статей
+        let articlesLikes = document.querySelectorAll('.post .post-likes');
+
+        articlesLikes.forEach((item, index) => {
+            let likesCount = parseInt(item.textContent.replace('❤️', '').trim());
+            // console.log('Likes count:', likesCount);
+            if (likesCount > likesThreshold) {
+                item.closest('.post').style.display = 'block'; // Показати статтю
+            } else {
+                item.closest('.post').style.display = 'none'; // Приховати статтю
+            }
+        })
+
     };
 
     // Шукати по кількості коментарів
@@ -167,9 +196,9 @@
     // Показати всі статті
     document.getElementById('cmdShowAll').onclick = function () {
         let articles = document.getElementsByClassName('post');
-        articles.forEach(article => {
-            article.style.display = 'block';
-        })
+        for (let i = 0; i < articles.length; i++) {
+            articles[i].style.display = 'block';
+        }
     };
 
 </script>
