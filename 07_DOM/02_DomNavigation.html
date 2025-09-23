@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+</head>
+<body>
+
+<h1> DOM Navigation </h1>
+<div id="dashboard">
+    <p><span id="cmdGreen">Make SelectMe Green</span></p>
+</div>
+<main id="content">
+    <ul>
+        <li class="selectMe">First</li>
+        <li>Second</li>
+        <li>Third
+            <ol>
+                <li>Third.1</li>
+                <li>Third.2
+                    <ul id="subMenu">
+                        <li>Third.2.1</li>
+                        <li class="selectMe">Third.2.2</li>
+                        <li>Third.2.3</li>
+                    </ul>
+                </li>
+                <li>Third.3</li>
+            </ol>
+        </li>
+        <li>Fourth</li>
+        <li>Fifth</li>
+        <li>Sixth</li>
+        <li>Seventh</li>
+        <li class="selectMe">Eighth</li>
+        <li>Ninth</li>
+        <li>Tenth</li>
+        <li>Eleventh</li>
+        <li>Last</li>
+    </ul>
+</main>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+
+<script>
+
+    document.getElementById('cmdGreen').onclick = function (event) {
+
+        // tagName - повертає колекцію елементів з вказаним тегом
+        // .className - повертає колекцію елементів з вказаним класом
+        // #id - повертає перший елемент з вказаним id
+        // * - повертає всі елементи
+
+        // document.querySelectorAll - повертає всі елементи, що відповідають CSS селектору
+        let elements = document.querySelectorAll('.selectMe');
+        elements.forEach(element => {
+            element.style.background = 'green';
+            element.style.color = 'white';
+        })
+
+        // document.querySelector - повертає перший елемент, що відповідає CSS селектору
+        let element = document.querySelector('.selectMe');
+        element.style.border = '3px solid red';
+
+        // let elements = document.getElementsByClassName('selectMe');
+        // console.log(elements); // HTMLCollection(3) [li.selectMe, li.selectMe, li.selectMe]
+        // for (let el of elements) {
+        //     el.style.background = 'green';
+        //     el.style.color = 'white';
+        // }
+    }
+
+</script>
+
+
+</body>
+</html>
