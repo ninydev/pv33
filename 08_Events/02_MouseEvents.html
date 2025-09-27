@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Events</title>
+
+    <style>
+        #dashboard {
+            background: #cccccc;
+        }
+    </style>
+</head>
+<body>
+<div id="dashboard">
+    <h1> Events: Now is = <span id="status"> Don't know</span></h1>
+    <nav>
+        <ul>
+            <li id="cmdStartRain"> Start Rain</li>
+            <li id="cmdStopRain"> Stop Rain</li>
+        </ul>
+    </nav>
+</div>
+
+
+<script>
+
+    let lastEventName = '';
+
+    function emitEvent(eventName) {
+        if (lastEventName !== eventName) {
+            console.log('Event: ' + eventName);
+            lastEventName = eventName;
+        }
+
+        switch (eventName) {
+            case 'startRain':
+                isRaining = true;
+                updateStatus();
+                document.body.style.backgroundImage = "url('img/bg/rain.jpg')";
+                break;
+            case 'stopRain':
+                isRaining = false;
+                updateStatus();
+                document.body.style.backgroundImage = "url('img/bg/sun.jpg')";
+                break;
+            default:
+                console.log('Unknown event: ' + eventName);
+        }
+    }
+
+
+    let isRaining = undefined;
+
+    let updateStatus = function () {
+        if (isRaining) {
+            document.getElementById('status').innerHTML = 'Raining';
+            console.log('Raining...');
+        } else {
+            document.getElementById('status').innerHTML = 'Sunny';
+            console.log('Sunny...');
+        }
+    }
+
+    document.getElementById('cmdStartRain').addEventListener('click', function (event) {
+        isRaining = true;
+        updateStatus();
+        document.body.style.backgroundImage = "url('img/bg/rain.jpg')";
+    })
+
+    document.getElementById('cmdStopRain').addEventListener('click', function (event) {
+        isRaining = false;
+        updateStatus();
+        document.body.style.backgroundImage = "url('img/bg/sun.jpg')";
+    })
+
+    // document.addEventListener('mousemove', function (event) {
+    //     console.log(event.clientX, event.clientY);
+    // })
+</script>
+
+</body>
+</html>
