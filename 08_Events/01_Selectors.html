@@ -2,9 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Blog</title>
+
     <style>
-        .post {
+
+        #post_2233 {
+            background: #ffffcc;
+        }
+
+        main .article {
+            border: 1px solid #333;
+            border-radius: 5px;
+        }
+
+        main article {
             border: 1px solid #ccc;
             padding: 16px;
             margin-bottom: 16px;
@@ -19,19 +30,22 @@
     </style>
 </head>
 <body>
-<div id="dashboard">
-    <ul>
-        <li id="cmdFindByTag"></li>
-        <li id="cmdFindByLikesCount"> Show where likes more 30
-            *) Use Input to enter like count </li>
-        <li id="cmdFindByCommentsCount"></li>
-        <li id="cmdFindByAuthor"></li>
-        <li id="cmdFindOlderThenDate"></li>
-        <li id="cmdShowAll"> Show all (clear filters) </li>
-    </ul>
-</div>
 
-<main class="blog">
+<header>
+    <h1> Blog </h1>
+    <nav>
+        <ul>
+            <li id="cmdFindByTag"> Search by Tag</li>
+            <li id="cmdFindByLikesCount"> Show where likes more 30 </li>
+            <li id="cmdFindByCommentsCount"> Find by comment count</li>
+            <li id="cmdFindByAuthor"> By Author </li>
+            <li id="cmdFindOlderThenDate"> Older than date </li>
+            <li id="cmdShowAll"> Show all (clear filters) </li>
+        </ul>
+    </nav>
+</header>
+
+<main>
     <article class="post">
         <header class="post-header">
             <img src="https://placehold.co/600x300" alt="thumbnail" class="post-thumb">
@@ -51,7 +65,7 @@
         </footer>
     </article>
 
-    <article class="post">
+    <article class="article">
         <header class="post-header">
             <img src="https://placehold.co/600x300" alt="thumbnail" class="post-thumb">
             <h2 class="post-title">Статья 2</h2>
@@ -70,7 +84,7 @@
         </footer>
     </article>
 
-    <article class="post">
+    <article class="post" id="post_2233">
         <header class="post-header">
             <img src="https://placehold.co/600x300" alt="thumbnail" class="post-thumb">
             <h2 class="post-title">Статья 3</h2>
@@ -108,7 +122,7 @@
         </footer>
     </article>
 
-    <article class="post">
+    <article class="article">
         <header class="post-header">
             <img src="https://placehold.co/600x300" alt="thumbnail" class="post-thumb">
             <h2 class="post-title">Статья 5</h2>
@@ -148,61 +162,6 @@
 </main>
 
 
-<script>
 
-    /**
-     * Завдання.
-     * 1. Реалізувати функціонал кнопок в #dashboard для фільтрації статей
-     * 2. Використовувати методи DOM для пошуку елементів
-     * 3. Фільтрація має бути клікабельною
-     * 4. Показувати/приховувати статті використовуючи стилі (display: none/block)
-     * 5. Показувати, яки фільтр застосовано (наприклад, змінюючи колір)
-     */
-
-
-    // Шукати по тегу
-    document.getElementById('cmdFindByTag').onclick = function () {
-    };
-
-    // Шукати по кількості лайків
-    document.getElementById('cmdFindByLikesCount').onclick = function () {
-        const likesThreshold = 30; // Поріг кількості лайків
-
-        // Знайти всі елементи з класом .post-likes всередині статей
-        let articlesLikes = document.querySelectorAll('.post .post-likes');
-
-        articlesLikes.forEach((item, index) => {
-            let likesCount = parseInt(item.textContent.replace('❤️', '').trim());
-            // console.log('Likes count:', likesCount);
-            if (likesCount > likesThreshold) {
-                item.closest('.post').style.display = 'block'; // Показати статтю
-            } else {
-                item.closest('.post').style.display = 'none'; // Приховати статтю
-            }
-        })
-
-    };
-
-    // Шукати по кількості коментарів
-    document.getElementById('cmdFindByCommentsCount').onclick = function () {
-    };
-
-    // Шукати по автору
-    document.getElementById('cmdFindByAuthor').onclick = function () {
-    };
-
-    // Шукати по даті (старші за вказану дату)
-    document.getElementById('cmdFindOlderThenDate').onclick = function () {
-    };
-
-    // Показати всі статті
-    document.getElementById('cmdShowAll').onclick = function () {
-        let articles = document.getElementsByClassName('post');
-        for (let i = 0; i < articles.length; i++) {
-            articles[i].style.display = 'block';
-        }
-    };
-
-</script>
 </body>
 </html>
