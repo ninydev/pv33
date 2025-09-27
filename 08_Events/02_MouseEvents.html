@@ -8,9 +8,19 @@
         #dashboard {
             background: #cccccc;
         }
+
+        #kitty {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: auto;
+        }
     </style>
 </head>
 <body>
+
+<img src="img/gifs/running_kitty.gif" id="kitty">
 <div id="dashboard">
     <h1> Events: Now is = <span id="status"> Don't know</span></h1>
     <nav>
@@ -27,6 +37,23 @@
 
 
 <script>
+
+    const kitty = document.getElementById('kitty');
+
+    document.addEventListener('mousemove', function (event) {
+        // Тип події
+        //console.log('mousemove: type: ', event.type);
+        // Елемент на котрому відбулося подія
+        //console.log(event.target);
+        // Координати миші
+        console.log(event.clientX, event.clientY);
+        kitty.style.top = (event.clientY - 75) + 'px';
+        kitty.style.left = (event.clientX - 75) + 'px';
+    })
+
+
+
+
 
     let lastEventName = '';
 
@@ -77,9 +104,7 @@
         document.body.style.backgroundImage = "url('img/bg/sun.jpg')";
     })
 
-    // document.addEventListener('mousemove', function (event) {
-    //     console.log(event.clientX, event.clientY);
-    // })
+
 </script>
 
 </body>
