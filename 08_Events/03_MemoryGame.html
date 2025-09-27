@@ -8,7 +8,9 @@
             width: 100px;
             height: 100px;
             border: 1px solid #000;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             margin: 10px;
             cursor: pointer;
         }
@@ -67,11 +69,11 @@
         div.appendChild(img);
         return div;
 
-        return `
-            <div class="card" data-id="${card.id}" data-name="${card.name}">
-                <img src="${card.img}" alt="${card.name}">
-            </div>
-        `;
+        // return `
+        //     <div class="card" data-id="${card.id}" data-name="${card.name}">
+        //         <img src="${card.img}" alt="${card.name}">
+        //     </div>
+        // `;
 
     }
 
@@ -80,6 +82,7 @@
         // Clear the game pad
         gamePad.innerHTML = "";
 
+        // Add cards to the game pad
         for (let i = 0; i < cardCount; i++) {
             const card = cards[Math.floor(Math.random() * cards.length)];
             const cardElement = renderCard(card);
