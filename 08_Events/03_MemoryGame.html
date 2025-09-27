@@ -48,11 +48,11 @@
     const cardCount = 20;
 
     const cards = [
-        { id: 1, url: "img/cards/horse.jpg", name: "horse" },
-        { id: 2, url: "img/cards/rabbit.jpg", name: "rabbit" },
-        { id: 3, url: "img/cards/snake_1.jpg", name: "snake" },
-        { id: 4, url: "img/cards/snake_2.jpg", name: "snake" },
-        { id: 5, url: "img/cards/snake_3.jpg", name: "snake" },
+        { id: 1, url: "img/cards/horse.png", name: "horse" },
+        { id: 2, url: "img/cards/rabbit.png", name: "rabbit" },
+        { id: 3, url: "img/cards/snake_1.png", name: "snake" },
+        { id: 4, url: "img/cards/snake_2.png", name: "snake" },
+        { id: 5, url: "img/cards/snake_3.png", name: "snake" },
 
     ]
 
@@ -64,8 +64,19 @@
 
     function onMouseOutCard(event) {
         const card = event.currentTarget;
+        if (card.getAttribute("is-open") === "true") {
+            return;
+        }
         const img = card.querySelector("img");
         img.style.opacity = "0";
+    }
+
+    function onCardClick(event) {
+        const card = event.currentTarget;
+        const img = card.querySelector("img");
+        img.style.opacity = "1";
+        card.setAttribute("is-open", true);
+        card.style.background = "#eee";
     }
 
     /**
@@ -83,6 +94,7 @@
         // Додаємо обробники подій
         div.onmouseover = onMouseOverCard;
         div.onmouseout = onMouseOutCard;
+        div.addEventListener("click", onCardClick);
 
         // Встановлюємо атрибути та вміст картки
         div.setAttribute("data-id", card.id);
