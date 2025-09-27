@@ -20,7 +20,7 @@
             object-fit: cover;
             display: block;
             opacity: 0;
-            transition: opacity 3s ease;
+            transition: opacity 0.5s ease;
             border: 1px solid #eee;
             border-radius: 3px;
         }
@@ -71,12 +71,23 @@
         img.style.opacity = "0";
     }
 
+    let openCard = null;
+
     function onCardClick(event) {
+
+        if (openCard !== null) {
+            const img = openCard.querySelector("img");
+            img.style.opacity = "0";
+            openCard.setAttribute("is-open", false);
+            openCard.style.background = "transparent";
+        }
+
         const card = event.currentTarget;
         const img = card.querySelector("img");
         img.style.opacity = "1";
         card.setAttribute("is-open", true);
         card.style.background = "#eee";
+        openCard = card;
     }
 
     /**
