@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Memory Game</title>
+    <style>
+        .card {
+            width: 100px;
+            height: 100px;
+            border: 1px solid #000;
+            display: inline-block;
+            margin: 10px;
+            cursor: pointer;
+        }
+        .card img {
+            width: 64px;
+            height: 64px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1> Memory Game </h1>
+    <nav>
+        <ul>
+            <li id="cmdStart"> Start Game </li>
+        </ul>
+    </nav>
+</header>
+
+<main id="gamePad">
+</main>
+
+
+<script>
+
+    const gamePad = document.getElementById("gamePad");
+
+    const cardCount = 20;
+
+    const cards = [
+        { id: 1, url: "img/cards/horse.jpg", name: "horse" },
+        { id: 2, url: "img/cards/rabbit.jpg", name: "rabbit" },
+        { id: 3, url: "img/cards/snake_1.jpg", name: "snake" },
+        { id: 4, url: "img/cards/snake_2.jpg", name: "snake" },
+        { id: 5, url: "img/cards/snake_3.jpg", name: "snake" },
+
+    ]
+
+    /**
+     * Render a card
+     *
+     * @param card
+     * @returns {HTMLDivElement}
+     */
+    function renderCard(card) {
+
+        const div = document.createElement("div");
+        div.className = "card";
+        div.setAttribute("data-id", card.id);
+        div.setAttribute("data-name", card.name);
+        const img = document.createElement("img");
+        img.src = card.url;
+        img.alt = card.name;
+        div.appendChild(img);
+        return div;
+
+        return `
+            <div class="card" data-id="${card.id}" data-name="${card.name}">
+                <img src="${card.img}" alt="${card.name}">
+            </div>
+        `;
+
+    }
+
+    function renderGamePad() {
+
+        // Clear the game pad
+        gamePad.innerHTML = "";
+
+        for (let i = 0; i < cardCount; i++) {
+            const card = cards[Math.floor(Math.random() * cards.length)];
+            const cardElement = renderCard(card);
+            gamePad.appendChild(cardElement);
+        }
+    }
+
+    document.getElementById("cmdStart").addEventListener("click", () => {
+        renderGamePad();
+    })
+
+
+</script>
+
+
+</body>
+</html>
