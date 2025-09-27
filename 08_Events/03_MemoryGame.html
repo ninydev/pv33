@@ -18,6 +18,11 @@
             width: 64px;
             height: 64px;
             object-fit: cover;
+            display: block;
+            opacity: 0;
+            transition: opacity 3s ease;
+            border: 1px solid #eee;
+            border-radius: 3px;
         }
     </style>
 </head>
@@ -51,6 +56,18 @@
 
     ]
 
+    function onMouseOverCard(event) {
+        const card = event.currentTarget;
+        const img = card.querySelector("img");
+        img.style.opacity = "1";
+    }
+
+    function onMouseOutCard(event) {
+        const card = event.currentTarget;
+        const img = card.querySelector("img");
+        img.style.opacity = "0";
+    }
+
     /**
      * Render a card
      *
@@ -59,10 +76,19 @@
      */
     function renderCard(card) {
 
+        // Створюємо елемент картки
         const div = document.createElement("div");
         div.className = "card";
+
+        // Додаємо обробники подій
+        div.onmouseover = onMouseOverCard;
+        div.onmouseout = onMouseOutCard;
+
+        // Встановлюємо атрибути та вміст картки
         div.setAttribute("data-id", card.id);
         div.setAttribute("data-name", card.name);
+
+        // Створюємо та додаємо зображення
         const img = document.createElement("img");
         img.src = card.url;
         img.alt = card.name;
