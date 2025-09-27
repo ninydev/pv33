@@ -12,9 +12,11 @@
         #kitty {
             position: absolute;
             top: 0;
-            right: 0;
+            left: 0;
             width: 150px;
             height: auto;
+            transform-origin: center center;
+            transition: transform 200ms ease; /* плавное движение */
         }
     </style>
 </head>
@@ -47,8 +49,35 @@
         //console.log(event.target);
         // Координати миші
         console.log(event.clientX, event.clientY);
-        kitty.style.top = (event.clientY - 75) + 'px';
-        kitty.style.left = (event.clientX - 75) + 'px';
+
+        // Розрахунок позиції котика
+        // щоб центр котика був під курсором миші
+        // а не верхній лівий кут
+        const rect = kitty.getBoundingClientRect();
+
+        // Знаходимо половину ширини і висоти
+        // щоб відняти від координат миші
+        // і отримати координати для центру котика
+        const halfW = rect.width / 2;
+        const halfH = rect.height / 2;
+
+        // Додаємо прокрутку сторінки
+        // щоб координати були відносно всієї сторінки
+        // а не тільки видимої частини
+        // і віднімаємо половину ширини і висоти
+        // щоб центр котика був під курсором миші
+        const x = event.clientX + window.scrollX - halfW;
+        const y = event.clientY + window.scrollY - halfH;
+
+        // Переміщаємо котика
+        // використовуючи CSS трансформацію
+        // це більш ефективно ніж змінювати top і left
+        // оскільки трансформації використовують GPU
+        // і не викликають перерахунок стилів і макета сторінки
+        kitty.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+
+        // kitty.style.top = (event.clientY - 75) + 'px';
+        // kitty.style.left = (event.clientX - 75) + 'px';
     })
 
 
