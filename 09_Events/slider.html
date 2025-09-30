@@ -6,6 +6,7 @@
 
     <style>
         #slider {
+            position: relative;
             list-style: none;
             margin: 0 auto; padding: 0;
             width: 1024px;
@@ -50,6 +51,21 @@
             background-image: url("img/2.png");}
         #slider3 {
             background-image: url("img/3.png");}
+
+        #sliderDashboard {
+            position: absolute;
+            z-index: 1000;
+            bottom: 0;
+            left: 0;
+            width: 1024px;
+            height: 100px;
+            background: #000;
+        }
+
+        #sliderAutoplay {
+            background-color: darkgreen;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -66,6 +82,9 @@
         <li id="slider3">
             <h2> PV33 Best group in the world </h2>
         </li>
+        <div id="sliderDashboard">
+            <span id="sliderAutoplay"> AutoPlay is On </span>
+        </div>
     </ul>
 
 </div>
@@ -93,7 +112,28 @@
         nextSliderElement.style.opacity = 1;
     }
 
-    setInterval(changeSlider, 3000);
+    let intervalPtr;
+
+    intervalPtr= setInterval(changeSlider, 3000);
+
+    /**
+     * AutoPlay
+     * Перевіряє чи є інтервал
+     * Якщо є - зупиняє інтервал, змінює текст та колір кнопки
+     * Якщо нема - запускає інтервал, змінює текст та колір кнопки
+     */
+    document.getElementById("sliderAutoplay").onclick = function () {
+        if (intervalPtr) {
+            clearInterval(intervalPtr);
+            intervalPtr = null;
+            this.innerHTML = "AutoPlay is Off";
+            this.style.backgroundColor = "darkred";
+        } else {
+            intervalPtr = setInterval(changeSlider, 3000);
+            this.innerHTML = "AutoPlay is On";
+            this.style.backgroundColor = "darkgreen";
+        }
+    }
 
 
 
