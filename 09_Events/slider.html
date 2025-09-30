@@ -197,6 +197,9 @@
      */
     document.getElementById("sliderNav").onclick = function (e) {
         let sliderNumber = e.target.dataset.num;
+        if (!sliderNumber) {
+            return;
+        }
         console.log(sliderNumber);
 
         stopAutoplay();
