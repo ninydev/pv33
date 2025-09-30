@@ -31,17 +31,25 @@
         }
 
         #slider li {
-            width: 100%;
-            height: 100%;
+            position: absolute;
+            margin: 0 auto;
+            width: 1024px;
+            height: 400px;
             padding: 10px;
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
+            transition: opacity 1s ease;
         }
 
-        #slider1 {background-image: url("img/1.png");}
-        #slider2 {background-image: url("img/2.png");}
-        #slider3 {background-image: url("img/3.png");}
+        #slider1 {
+            opacity: 0;
+            background-image: url("img/1.png");}
+        #slider2 {
+            opacity: 0;
+            background-image: url("img/2.png");}
+        #slider3 {
+            background-image: url("img/3.png");}
     </style>
 </head>
 <body>
@@ -61,6 +69,30 @@
     </ul>
 
 </div>
+
+<script>
+
+    let currentSliderNumber = 3;
+
+    function changeSlider() {
+        let currentSliderElement
+            = document.getElementById("slider" + currentSliderNumber);
+        currentSliderElement.style.opacity = 0;
+        currentSliderNumber++;
+        if (currentSliderNumber > 3) {
+            currentSliderNumber = 1;
+        }
+
+        let nextSliderElement
+            = document.getElementById("slider" + currentSliderNumber);
+        nextSliderElement.style.opacity = 1;
+    }
+
+    setInterval(changeSlider, 3000);
+
+
+
+</script>
 
 </body>
 </html>
