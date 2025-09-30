@@ -101,16 +101,15 @@
         <li id="slider3">
             <h2> PV33 Best group in the world </h2>
         </li>
-        <div id="sliderDashboard">
-            <span id="sliderAutoplay"> AutoPlay is On </span>
-            <ul id="sliderNav">
-                <li data-num="1">1</li>
-                <li data-num="2">2</li>
-                <li data-num="3">3</li>
-            </ul>
-        </div>
     </ul>
-
+    <div id="sliderDashboard">
+        <span id="sliderAutoplay"> AutoPlay is On </span>
+        <ul id="sliderNav">
+            <li data-num="1">1</li>
+            <li data-num="2">2</li>
+            <li data-num="3">3</li>
+        </ul>
+    </div>
 </div>
 
 <script>
@@ -177,6 +176,38 @@
      */
     sliderAutoplay.onclick = function () {
         intervalPtr? stopAutoplay() : startAutoplay();
+    }
+
+    /**
+     * Hide all sliders
+     */
+    function hideAllSliders() {
+        document
+            .getElementById("slider")
+            .querySelectorAll("li")
+            .forEach(function (slider) {
+                slider.style.opacity = 0;
+            })
+    }
+
+    /**
+     * Change slider
+     * Перемикає слайд на обранний користувачом
+     * @param e
+     */
+    document.getElementById("sliderNav").onclick = function (e) {
+        let sliderNumber = e.target.dataset.num;
+        console.log(sliderNumber);
+
+        stopAutoplay();
+        hideAllSliders();
+
+        let sliderElement = document.getElementById("slider" + sliderNumber);
+        sliderElement.style.opacity = 1;
+
+        currentSliderNumber = sliderNumber;
+
+
     }
 
 
