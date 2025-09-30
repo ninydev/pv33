@@ -66,6 +66,25 @@
             background-color: darkgreen;
             cursor: pointer;
         }
+
+        #sliderNav {
+            list-style: none;
+            margin: 0; padding: 0;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+        #sliderNav li {
+            position: relative;
+            display: inline-block;
+            margin: 0 10px;
+            padding: 10px;
+            width: 50px; height: 50px;
+            border: 1px solid #fff;
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -84,6 +103,11 @@
         </li>
         <div id="sliderDashboard">
             <span id="sliderAutoplay"> AutoPlay is On </span>
+            <ul id="sliderNav">
+                <li data-num="1">1</li>
+                <li data-num="2">2</li>
+                <li data-num="3">3</li>
+            </ul>
         </div>
     </ul>
 
@@ -92,6 +116,8 @@
 <script>
 
     let currentSliderNumber = 3;
+
+    const sliderAutoplay = document.getElementById("sliderAutoplay");
 
     /**
      * Change slider
@@ -117,22 +143,40 @@
     intervalPtr= setInterval(changeSlider, 3000);
 
     /**
+     * Зупиняє інтервал
+     * Якщо інтервал є - зупиняє його, змінює текст та колір кнопки
+     * Якщо інтервалу нема - нічого не робить
+     */
+    function stopAutoplay() {
+        if (intervalPtr) {
+            clearInterval(intervalPtr);
+            intervalPtr = null;
+            sliderAutoplay.innerHTML = "AutoPlay is Off";
+            sliderAutoplay.style.backgroundColor = "darkred";
+        }
+    }
+
+    /**
+     * Start interval
+     * Якщо інтервалу нема - запускає його, змінює текст та колір кнопки
+     * Якщо інтервал є - нічого не робить
+     */
+    function startAutoplay() {
+        if (!intervalPtr) {
+            intervalPtr = setInterval(changeSlider, 3000);
+            sliderAutoplay.innerHTML = "AutoPlay is On";
+            sliderAutoplay.style.backgroundColor = "darkgreen";
+        }
+    }
+
+    /**
      * AutoPlay
      * Перевіряє чи є інтервал
      * Якщо є - зупиняє інтервал, змінює текст та колір кнопки
      * Якщо нема - запускає інтервал, змінює текст та колір кнопки
      */
-    document.getElementById("sliderAutoplay").onclick = function () {
-        if (intervalPtr) {
-            clearInterval(intervalPtr);
-            intervalPtr = null;
-            this.innerHTML = "AutoPlay is Off";
-            this.style.backgroundColor = "darkred";
-        } else {
-            intervalPtr = setInterval(changeSlider, 3000);
-            this.innerHTML = "AutoPlay is On";
-            this.style.backgroundColor = "darkgreen";
-        }
+    sliderAutoplay.onclick = function () {
+        intervalPtr? stopAutoplay() : startAutoplay();
     }
 
 
