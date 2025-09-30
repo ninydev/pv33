@@ -2,7 +2,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Tabs</title>
+
+    <style>
+        #myTabs {
+            width: 1024px;
+            margin: 0 auto;
+        }
+
+        #tabsNav {
+            background: #cccccc;
+        }
+
+        #tabsNav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        #tabsNav li {
+            display: inline-block;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        #tabsNav li:hover {
+            background: #dddddd;
+        }
+
+        #tabsNav li.active {
+            background: #eeeeee;
+        }
+
+        #tabsContent {
+            background: #eeeeee;
+        }
+
+        #tabsContent ul {
+            list-style: none;
+        }
+
+        #tabsContent li {
+            display: none;
+        }
+
+        #tabsContent li.active {
+            display: block;
+        }
+
+        #tabsContent article {
+            padding: 10px;
+        }
+    </style>
 </head>
 <body>
 
@@ -10,7 +61,7 @@
 
     <nav id="tabsNav">
         <ul>
-            <li data-tabname="About"> Про мене </li>
+            <li class="active" data-tabname="About"> Про мене </li>
             <li data-tabname="Approach"> Підхід </li>
             <li data-tabname="Values"> Цінності </li>
             <li data-tabname="FeaturesTherapy"> Особливості терапії</li>
@@ -19,7 +70,7 @@
 
     <div id="tabsContent">
         <ul>
-            <li data-tabcontent="About">
+            <li class="active" data-tabcontent="About">
                 <article>
                     <h1> Про мене </h1>
                 </article>
@@ -43,6 +94,24 @@
     </div>
 
 </main>
+
+<script>
+    const tabsNav = document.getElementById('tabsNav');
+    const tabsContent = document.getElementById('tabsContent');
+
+    tabsNav.addEventListener('click', function(event) {
+        if (event.target.tagName === 'LI') {
+            const tabName = event.target.getAttribute('data-tabname');
+            const tabContent = tabsContent.querySelector(`[data-tabcontent="${tabName}"]`);
+
+            tabsNav.querySelector('.active').classList.remove('active');
+            event.target.classList.add('active');
+
+            tabsContent.querySelector('.active').classList.remove('active');
+            tabContent.classList.add('active');
+        }
+    })
+</script>
 
 </body>
 </html>
