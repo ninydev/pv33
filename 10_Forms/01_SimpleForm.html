@@ -5,6 +5,31 @@
     <title>Title</title>
 </head>
 <body>
+<div>
+    <ul>
+        <li id="pswdLenError">Min Password Size is 8</li>
+        <li id="pswdNumericError"> Must have numeric</li>
+        <li id="pswdUppercaseError"> Must have UpperCase</li>
+        <li id="pswdLowercaseError"> Must have LowerCase</li>
+        <li id="pswdConfirmError"> Confirm password</li>
+
+    </ul>
+</div>
+
+<div>
+    <form name="frmPassword">
+        <label> Enter password<input type="text"></label><br>
+        <label>Confirm Password <input type="text"></label><br>
+        <input type="submit" ><br>
+    </form>
+</div>
+
+<script>
+    const frm = document.forms['frmPassword']
+    console.log(frm)
+</script>
+
+
 
 </body>
 </html>
