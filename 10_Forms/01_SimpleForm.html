@@ -17,6 +17,7 @@
         <li id="pswdUppercaseError"> Must have UpperCase</li>
         <li id="pswdLowercaseError"> Must have LowerCase</li>
         <li id="pswdConfirmError"> Confirm password</li>
+        <li id="privacyConfirmError"> Confirm privacy</li>
 
     </ul>
 </div>
@@ -25,6 +26,7 @@
     <form name="frmPassword" method="get">
         <label> Enter password<input type="text" name="pswd"></label><br>
         <label>Confirm Password <input type="text" name="pswdConfirm"></label><br>
+        <label><input type="checkbox" name="privacyConfirm" >Privacy</label>
         <input type="submit" name="sendForm" ><br>
     </form>
 </div>
@@ -35,6 +37,7 @@
     const pswdUppercaseError =document.getElementById('pswdUppercaseError')
     const pswdLowercaseError =document.getElementById('pswdLowercaseError')
     const pswdConfirmError =document.getElementById('pswdConfirmError')
+    const privacyConfirmError =document.getElementById('privacyConfirmError')
 
     const frm = document.forms['frmPassword']
     console.log(frm)
@@ -47,6 +50,15 @@
 
         hasErrors = false;
 
+        if( !frm.elements['privacyConfirm'].checked) {
+            hasErrors = true
+            privacyConfirmError.classList.add('pswdError')
+            privacyConfirmError.classList.remove('pswdOk')
+        } else {
+            privacyConfirmError.classList.remove('pswdError')
+            privacyConfirmError.classList.add('pswdOk')
+        }
+
         if (pswd.length < 8 || pswdConfirm.length < 8) {
             hasErrors = true
             pswdLenError.classList.add('pswdError')
@@ -58,12 +70,15 @@
 
         if (hasErrors)
             frm.elements['sendForm'].disabled = true
+        else
+            frm.elements['sendForm'].disabled = false
 
         console.log(pswd)
     }
 
     frm.elements['pswd'].addEventListener('keypress',  validateForm);
     frm.elements['pswdConfirm'].addEventListener('keypress',  validateForm);
+    frm.elements['privacyConfirm'].addEventListener('change',  validateForm);
 
     frm.onsubmit = function (ev) {
 

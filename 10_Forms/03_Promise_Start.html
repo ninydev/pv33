@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<script>
+    const p = new Promise((resolve, reject) => {
+        // тут начинается асинхронная работа
+        setTimeout(() => {
+            const ok = Math.random() > 0.3;
+            if (ok) resolve('Готово!');
+            else reject(new Error('Что-то пошло не так'));
+        }, 1000);
+    });
+
+    p.then(value => {
+        console.log('Успех:', value);
+    }).catch(err => {
+        console.error('Ошибка:', err);
+    }).finally(() => {
+        console.log('Готово/не готово — всегда выполнится');
+    });
+</script>
+
+</body>
+</html>
