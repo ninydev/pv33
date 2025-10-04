@@ -18,15 +18,40 @@
 
 <div>
     <form name="frmPassword">
-        <label> Enter password<input type="text"></label><br>
-        <label>Confirm Password <input type="text"></label><br>
+        <label> Enter password<input type="text" name="pswd"></label><br>
+        <label>Confirm Password <input type="text" name="pswdConfirm"></label><br>
         <input type="submit" ><br>
     </form>
 </div>
 
 <script>
+    const pswdLenError =document.getElementById('pswdLenError')
+    const pswdNumericError =document.getElementById('pswdNumericError')
+    const pswdUppercaseError =document.getElementById('pswdUppercaseError')
+    const pswdLowercaseError =document.getElementById('pswdLowercaseError')
+    const pswdConfirmError =document.getElementById('pswdConfirmError')
+
     const frm = document.forms['frmPassword']
     console.log(frm)
+
+    const hasErrors = true
+
+    function validateForm() {
+        const pswd = frm.elements['pswd'].value
+        const pswdConfirm = frm.elements['pswdConfirm'].value
+
+        console.log(pswd)
+    }
+
+    frm.onsubmit = function (ev) {
+
+        ev.preventDefault();
+     validateForm()
+        return false
+    }
+
+
+
 </script>
 
 
