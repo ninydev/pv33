@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div id="dashboard">
+
+    <button onclick="getCat()"> Get Cat </button>
+
+</div>
+
+<main id="content">
+    <img src="" alt="" id="catImg">
+</main>
+
+<script>
+    // Этот файл демонстрирует самый простой AJAX-запрос с помощью функции fetch.
+    // Полезные ссылки для понимания:
+    // - fetch (MDN): https://developer.mozilla.org/ru/docs/Web/API/fetch
+    // - Response (MDN): https://developer.mozilla.org/ru/docs/Web/API/Response
+    // - JSON (MDN): https://developer.mozilla.org/ru/docs/Learn/JavaScript/Objects/JSON
+    // - Промисы (MDN): https://developer.mozilla.org/ru/docs/Web/JavaScript/Guide/Using_promises
+    // - then/catch (MDN): https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Promise/then
+    // - TheCatAPI (API с котиками): https://thecatapi.com/
+
+    // Находим элемент <img>, в который будем вставлять картинку котика
+    const catImg = document.getElementById('catImg');
+
+    // Функция вызывается по клику на кнопку "Get Cat"
+    function getCat() {
+        // 1) Делаем HTTP-запрос на публичное API с котиками.
+        // fetch возвращает ПРОМИС (Promise). Промис — это объект, который
+        // представляет результат асинхронной операции (сейчас — сетевой запрос).
+        // Когда ответ придёт, промис перейдёт в состояние "выполнен" (fulfilled)
+        // или "отклонён" (rejected).
+        // Документация по Promise: см. ссылки выше.
+        fetch('https://api.thecatapi.com/v1/images/search')
+            // 2) Обрабатываем первый успешный результат промиса от fetch.
+            // Сюда попадает объект Response (не сами данные!).
+            // Чтобы получить JSON, нужно явно вызвать response.json(),
+            // что тоже возвращает ПРОМИС, который выполнится, когда тело ответа
+            // будет разобрано как JSON.
+            .then(response => {
+                console.log(response); // Для наглядности смотрим, что пришло.
+                // response.ok === true означает, что HTTP-статус в диапазоне 200-299.
+                if (response.ok) {
+                    // Преобразуем тело ответа в JavaScript-объекты из JSON.
+                    return response.json();
+                } else {
+                    // Если статус не ок, вручную отклоняем промис выбросом ошибки.
+                    // Это отправит нас в .catch ниже.
+                    throw new Error('Что-то пошло не так: ' + response.status + ' ' + response.statusText);
+                }
+            })
+            // 3) Здесь мы уже работаем с данными (массив объектов), полученными из JSON.
+            .then(catsArr => {
+                console.log(catsArr); // Обычно это массив из одного объекта с полями url, width, height, id
+                // Берём первую картинку из массива и подставляем её в <img>
+                catImg.src = catsArr[0].url;
+                catImg.width = catsArr[0].width;
+                catImg.height = catsArr[0].height;
+                catImg.alt = catsArr[0].id; // полезно для доступности
+            })
+            // 4) Если что-то пошло не так на любом этапе (сетевая ошибка, плохой статус,
+            // ошибка парсинга JSON, ошибка в коде выше), управление попадёт сюда.
+            .catch(error => {
+                console.log(error); // В реальном приложении можно показать уведомление пользователю
+            });
+        // ВАЖНО: код после fetch продолжит выполняться сразу, не дожидаясь ответа.
+        // Именно поэтому нам и нужны промисы/then/catch для обработки результатов, когда они появятся.
+    }
+</script>
+
+<script>
+    // Ещё один пример fetch-запроса (закомментирован). Источник данных — учебный API JSONPlaceholder:
+    // https://jsonplaceholder.typicode.com/
+    // Логика та же: делаем запрос → превращаем ответ в JSON → используем данные.
+    // fetch('https://jsonplaceholder.typicode.com/posts')
+    //     .then(response => response.json())
+    //     .then(data => {
+    //         console.log(data);
+    //         // Пример использования: вывести заголовок первого поста в блок dashboard
+    //         document.getElementById('dashboard').innerHTML = data[0].title;
+    //     })
+</script>
+
+</body>
+</html>
