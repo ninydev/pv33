@@ -93,8 +93,8 @@
                 'content-type':'application/json',
                 // Accept — какой тип ответа ожидаем получить
                 'Accept':'application/json',
-                // Произвольный заголовок (не обязателен). Здесь просто пример.
-                'Language':'en-US'
+                // Accept-Language — стандартный заголовок с предпочтительным языком пользователя
+                'Accept-Language': navigator.language || 'en-US'
             },
             // Тело запроса — данные формы в формате JSON
             body: JSON.stringify(data)
@@ -114,7 +114,7 @@
                 // После успешного создания перезагружаем список пользователей
                 getUsers()
             })
-            // Здесь можно добавить .catch(...) для обработки ошибок отправки формы
+            .catch( err => console.error(err))
     })
 
     // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ДЛЯ ПОКАЗА/СКРЫТИЯ ВКЛАДОК
@@ -176,7 +176,7 @@
             headers: {
                 'content-type':'application/json', // формат, с которым работаем
                 'Accept':'application/json',       // ожидаем ответ в JSON
-                'Language':'en-US'
+                'Accept-Language': navigator.language || 'en-US'
             },
         })
             .then(response => {
