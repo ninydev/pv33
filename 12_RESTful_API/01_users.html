@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User RESTful API</title>
+</head>
+<body>
+
+<header>
+    <h1> User DB </h1>
+    <nav>
+        <ul>
+            <li></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+        </thead>
+
+        <tbody id="userTable">
+        </tbody>
+
+        <tfoot>
+        <tr>
+            <td colspan="3">Total: <span id="userTotal"></span></td>
+        </tr>
+        </tfoot>
+
+
+    </table>
+</main>
+
+
+
+<script>
+
+    const BASE_URL = 'https://68e9272ef2707e6128cdd00e.mockapi.io'
+    const USERS_URL = BASE_URL + '/users'
+
+    let page = 1;
+    let limit = 10;
+
+    let users = [];
+
+    const userTable = document.getElementById('userTable');
+    function renderTable() {
+        userTable.innerHTML = '';
+        users.forEach(user => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${user.id}</td>
+                <td>${user.name}</td>
+                <td>${user.email}</td>
+            `;
+            userTable.appendChild(row);
+        })
+    }
+
+    function getUsers() {
+
+        const url = new URL(USERS_URL);
+        url.searchParams.append('page', page);
+        url.searchParams.append('limit', limit);
+
+
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'content-type':'application/json',
+                'Accept':'application/json',
+                'Language':'en-US'
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                users = data;
+                renderTable()
+            })
+            .catch(error => console.log(error))
+    }
+
+    // DOMContentLoaded - when the DOM is fully loaded and parsed
+    document.addEventListener('DOMContentLoaded', getUsers)
+
+</script>
+
+</body>
+</html>
