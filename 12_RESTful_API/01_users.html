@@ -10,49 +10,146 @@
     <h1> User DB </h1>
     <nav>
         <ul>
-            <li></li>
+            <li id="cmdOpenTable"  onclick="showForm()"> Create </li>
+            <li id="cmdOpenForm"  onclick="showTable()"> Read All</li>
         </ul>
     </nav>
 </header>
 
 <main>
-    <table>
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-        </tr>
-        </thead>
 
-        <tbody id="userTable">
-        </tbody>
+    <ul>
+        <li id="tabForm" style="display: none">
+            <form name="frmUser">
+                <label>Name <input type="text" name="name"></label><br>
+                <label>Email <input type="text" name="email"></label><br>
+                <input type="submit" name="sendForm" ><br>
+            </form>
+        </li>
 
-        <tfoot>
-        <tr>
-            <td colspan="3">Total: <span id="userTotal"></span></td>
-        </tr>
-        </tfoot>
+        <li id="tabTable">
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                </tr>
+                </thead>
+
+                <tbody id="userTable">
+                </tbody>
+
+                <!--         Я подумаю, как в этом случае строить пагинацию-->
+                <!--        <tfoot>-->
+                <!--        <tr>-->
+                <!--            <td colspan="3">Pages:-->
+                <!--                <button id="cmdPrevPage">Prev</button>-->
+                <!--                <ul id="pages">-->
+                <!--                    <li>1</li>-->
+                <!--                </ul>-->
+                <!--                <button id="cmdNextPage">Prev</button>-->
+                <!--            </td>-->
+                <!--        </tr>-->
+                <!--        </tfoot>-->
 
 
-    </table>
+            </table>
+        </li>
+    </ul>
+
+
 </main>
 
 
 
 <script>
-
+    // БАЗОВЫЕ НАСТРОЙКИ API
+    // Адрес тестового сервера (MockAPI). На него отправляем все запросы.
     const BASE_URL = 'https://68e9272ef2707e6128cdd00e.mockapi.io'
+    // Полный адрес ресурса "users". Здесь лежит список пользователей.
     const USERS_URL = BASE_URL + '/users'
 
-    let page = 1;
-    let limit = 10;
+    // ОБРАБОТЧИК ОТПРАВКИ ФОРМЫ "Create" (создание пользователя)
+    document.forms.namedItem('frmUser').addEventListener('submit', function (event) {
+        // Останавливаем стандартную отправку формы (перезагрузка страницы не нужна)
+        event.preventDefault();
+        // Собираем данные из полей формы
+        const formData = new FormData(this);
+        // Превращаем FormData в обычный объект { name: '...', email: '...' }
+        const data = Object.fromEntries(formData);
+        console.log('Данные из формы перед отправкой:', data);
 
+        // HTTP запрос: POST /users
+        // Назначение: создать нового пользователя на сервере
+        // Важные части запроса:
+        // - method: 'POST' — говорим серверу, что хотим СОЗДАТЬ запись
+        // - headers: сообщаем, в каком формате отправляем/хотим получить данные
+        // - body: JSON-строка с данными формы (имя и email)
+        fetch(USERS_URL, {
+            method: 'POST',
+            headers: {
+                // content-type — тип отправляемого контента
+                'content-type':'application/json',
+                // Accept — какой тип ответа ожидаем получить
+                'Accept':'application/json',
+                // Произвольный заголовок (не обязателен). Здесь просто пример.
+                'Language':'en-US'
+            },
+            // Тело запроса — данные формы в формате JSON
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                // response.ok === true, если статус 200–299
+                if (!response.ok) {
+                    // Если сервер вернул ошибку (например, 400 или 500), бросаем исключение
+                    throw new Error('Network response was not ok')
+                }
+                // Преобразуем ответ из JSON-текста в объект JS
+                return response.json()
+            })
+            .then(createdUser => {
+                // createdUser — пользователь, которого сервер создал и вернул
+                console.log('Созданный пользователь с сервера:', createdUser)
+                // После успешного создания перезагружаем список пользователей
+                getUsers()
+            })
+            // Здесь можно добавить .catch(...) для обработки ошибок отправки формы
+    })
+
+    // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ДЛЯ ПОКАЗА/СКРЫТИЯ ВКЛАДОК
+    function hideAll() {
+        document.getElementById('tabForm').style.display = 'none';
+        document.getElementById('tabTable').style.display = 'none';
+    }
+
+    function showForm() {
+        hideAll();
+        document.getElementById('tabForm').style.display = 'block';
+    }
+
+    function showTable() {
+        hideAll();
+        document.getElementById('tabTable').style.display = 'block';
+    }
+
+    function openForm() {}
+
+    // ПАРАМЕТРЫ ПАГИНАЦИИ (какую страницу и сколько записей запрашивать)
+    let page = 1;    // текущая страница (начинается с 1)
+    let limit = 10;  // сколько пользователей запрашивать за раз
+
+    // Здесь будет храниться список пользователей, пришедший с сервера
     let users = [];
 
+    // ССЫЛКА НА ТЕЛО ТАБЛИЦЫ, куда будем вставлять строки пользователей
     const userTable = document.getElementById('userTable');
+
+    // РЕНДЕРИНГ ТАБЛИЦЫ ИЗ МАССИВА users
     function renderTable() {
+        // Очищаем текущие строки таблицы
         userTable.innerHTML = '';
+        // Для каждого пользователя создаем новую строку <tr>
         users.forEach(user => {
             const row = document.createElement('tr');
             row.innerHTML = `
@@ -64,33 +161,42 @@
         })
     }
 
+    // ЗАГРУЗКА СПИСКА ПОЛЬЗОВАТЕЛЕЙ С СЕРВЕРА
     function getUsers() {
-
+        // Формируем URL с параметрами запроса (пагинация)
+        // Пример итогового адреса: https://.../users?page=1&limit=10
         const url = new URL(USERS_URL);
-        url.searchParams.append('page', page);
-        url.searchParams.append('limit', limit);
+        url.searchParams.append('page', page);   // какая страница
+        url.searchParams.append('limit', limit); // сколько элементов
 
-
+        // HTTP запрос: GET /users?page=...&limit=...
+        // Назначение: получить список пользователей (чтение данных)
         fetch(url, {
-            method: 'GET',
+            method: 'GET', // метод чтения данных
             headers: {
-                'content-type':'application/json',
-                'Accept':'application/json',
+                'content-type':'application/json', // формат, с которым работаем
+                'Accept':'application/json',       // ожидаем ответ в JSON
                 'Language':'en-US'
             },
         })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-                users = data;
-                renderTable()
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok')
+                }
+                return response.json()
             })
-            .catch(error => console.log(error))
+            .then(data => {
+                // data — это массив пользователей, который вернул сервер
+                console.log('Пользователи с сервера:', data)
+                users = data;   // сохраняем в переменную
+                renderTable()   // перерисовываем таблицу
+            })
+            .catch(error => console.log('Ошибка при получении пользователей:', error))
     }
 
-    // DOMContentLoaded - when the DOM is fully loaded and parsed
+    // Событие DOMContentLoaded — срабатывает, когда HTML загружен и разобран
+    // После этого автоматически загружаем список пользователей
     document.addEventListener('DOMContentLoaded', getUsers)
-
 </script>
 
 </body>
