@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>User RESTful API</title>
+    <script src="https://kit.fontawesome.com/e638124f9c.js" crossorigin="anonymous"></script>
+
 </head>
 <body>
 
@@ -34,6 +36,7 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Email</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
 
@@ -69,6 +72,24 @@
     const BASE_URL = 'https://68e9272ef2707e6128cdd00e.mockapi.io'
     // Полный адрес ресурса "users". Здесь лежит список пользователей.
     const USERS_URL = BASE_URL + '/users'
+
+    function deleteUser(id) {
+        fetch(USERS_URL + '/' + id, {
+            method: 'DELETE',
+            headers: {
+                'content-type':'application/json',
+                'Accept':'application/json',
+                'Accept-Language': navigator.language || 'en-US'
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok')
+                }
+                getUsers()
+            })
+            .catch(err=> console.error(err))
+    }
 
     // ОБРАБОТЧИК ОТПРАВКИ ФОРМЫ "Create" (создание пользователя)
     document.forms.namedItem('frmUser').addEventListener('submit', function (event) {
@@ -156,6 +177,10 @@
                 <td>${user.id}</td>
                 <td>${user.name}</td>
                 <td>${user.email}</td>
+                <td>
+                    <i class="fa-solid fa-pen-nib"></i>
+                    <i class="fa-solid fa-trash" onclick="deleteUser(${user.id})"></i>
+                </td>
             `;
             userTable.appendChild(row);
         })
