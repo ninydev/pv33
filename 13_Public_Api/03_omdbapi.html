@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>omdbapi</title>
+</head>
+<body>
+
+
+<script>
+    const API_KEY = '53cc027b';
+    const BASE_API_URL = `http://www.omdbapi.com/?apikey=${API_KEY}`;
+    const BASE_IMG_URL = `http://img.omdbapi.com/?apikey=${API_KEY}`;
+
+    const search = 'The Godfather';
+
+    const url = `${BASE_API_URL}&t=${search}`;
+
+    fetch(url)
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.log(error);
+    })
+
+</script>
+</body>
+</html>
