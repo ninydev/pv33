@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Audio DB</title>
+</head>
+<body>
+
+<header>
+    <h1>The Audio DB </h1>
+</header>
+
+<div id="dashboard">
+    <label>Search: <input type="text" id="search"></label>
+    <button id="btnSearch">Search</button>
+</div>
+
+<main id="content">
+    <ul id="result"></ul>
+</main>
+
+<script>
+    const API_KEY = '123';
+    const API_URL = 'https://www.theaudiodb.com/api/v1/json';
+    const SEARCH_URL = `${API_URL}/${API_KEY}/search.php?s=`;
+
+
+</script>
+
+</body>
+</html>
