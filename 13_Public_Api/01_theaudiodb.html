@@ -24,6 +24,51 @@
     const API_URL = 'https://www.theaudiodb.com/api/v1/json';
     const SEARCH_URL = `${API_URL}/${API_KEY}/search.php?s=`;
 
+    document.getElementById('btnSearch').addEventListener('click', () => {
+
+        // 1 - validate
+        let search = document.getElementById('search').value;
+        if (!search) return;
+        if (search.length < 3) return;
+
+        fetch(SEARCH_URL + search)
+            // 2 - process response status
+            .then(res => {
+                    if (!res.ok) {
+                        throw new Error('Error fetching data' + res.statusText + ' (' + res.status + ')');
+                    }
+                    return res.json()
+                }
+            )
+            // 3 - process response data
+            .then(data => {
+                console.log(data)
+                document.getElementById('result').innerHTML = '';
+
+                if (!data.artists) {
+                    console.log('No results found')
+                    return;
+                }
+
+                data.artists.forEach(artist => {
+                    console.log(artist)
+                    let html = `
+<li>
+    <img src="${artist.strArtistThumb}" alt="${artist.strArtist}">
+    <h2>${artist.strArtist}</h2>
+    <p>Formed in: ${artist.intFormedYear}</p>
+    <p>Genre: ${artist.strGenre}</p>
+    <p>Country: ${artist.strCountry}</p>
+    <p><a href="https://${artist.strWebsite}" target="_top">Website</a></p>
+    <p>${artist.strBiographyEN}</p>
+</li>
+`
+                    document.getElementById('result').innerHTML += html;
+                })
+            })
+            .catch(err => console.log(err))
+    })
+
 
 </script>
 
