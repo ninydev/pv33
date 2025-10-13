@@ -21,8 +21,10 @@
 
 <script>
     const API_KEY = '123';
-    const API_URL = 'https://www.theaudiodb.com/api/v1/json';
-    const SEARCH_URL = `${API_URL}/${API_KEY}/search.php?s=`;
+    const API_URL_V1 = 'https://www.theaudiodb.com/api/v1/json';
+    const API_URL_V2 = 'https://www.theaudiodb.com/api/v2/json';
+    const SEARCH_URL = `${API_URL_V1}/${API_KEY}/search.php?s=`;
+    const ALBUM_URL = `${API_URL_V1}/${API_KEY}/discography-mb.php?s=`;
 
     document.getElementById('btnSearch').addEventListener('click', () => {
 
@@ -45,11 +47,13 @@
                 console.log(data)
                 document.getElementById('result').innerHTML = '';
 
+                // 4 - process data - has results?
                 if (!data.artists) {
                     console.log('No results found')
                     return;
                 }
 
+                // 5 - process data - display results
                 data.artists.forEach(artist => {
                     console.log(artist)
                     let html = `
@@ -64,6 +68,30 @@
 </li>
 `
                     document.getElementById('result').innerHTML += html;
+
+                    // 6 - process data - albums
+
+                    fetch(ALBUM_URL + artist.strMusicBrainzID)
+                        .then(res => {
+                            if (!res.ok) {
+                                throw new Error('Error fetching albums' + res.statusText + ' (' + res.status + ')');
+                            }
+                            return res.json()
+                        })
+                        .then(data => {
+                            console.log(data)
+                            if (!data.album) return;
+                            let html = '<h3>Albums:</h3><ul>';
+                            data.album.forEach(album => {
+                                html += `<li>
+                                    <p>${album.strAlbum} (${album.intYearReleased})</p>
+                                </li>`;
+                            })
+                            html += '</ul>';
+                            document.getElementById('result').innerHTML += html;
+
+                        })
+
                 })
             })
             .catch(err => console.log(err))
