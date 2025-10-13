@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Open Weather Map</title>
+</head>
+<body>
+
+<script>
+
+    const API_KEY = 'd55d7e3b16ffa113b7d67bc7244c5148';
+    const API_URL = 'https://api.openweathermap.org/data/2.5/weather';
+
+    // Request weather by longitude/latitude
+    function getWeatherByLngLat(lng, lat) {
+        fetch(`${API_URL}?lat=${lat}&lon=${lng}&appid=${API_KEY}&units=metric`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Weather data:', data);
+            })
+            .catch(error => console.error('Weather request error:', error));
+    }
+
+    // Get coordinates from the browser and then request weather
+    function requestLocationAndFetchWeather() {
+        if (!('geolocation' in navigator)) {
+            console.error('Geolocation is not supported by this browser.');
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                const { latitude, longitude } = position.coords;
+                console.log(`Got location from browser: lat=${latitude}, lon=${longitude}`);
+                getWeatherByLngLat(longitude, latitude);
+            },
+            error => {
+                console.error('Error getting location:', error);
+                // Optionally, you can set a fallback location here
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            }
+        );
+    }
+
+    // Auto-run on page load
+    document.addEventListener('DOMContentLoaded', requestLocationAndFetchWeather);
+
+</script>
+
+</body>
+</html>
