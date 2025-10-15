@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script>
+    let db = window.indexedDB.open('myDB', 1);
+    db.onupgradeneeded = function (e) {
+        let db = e.target.result;
+        let store = db.createObjectStore('myStore', {keyPath: 'id'});
+        store.createIndex('name', 'name', {unique: false});
+    }
+
+    db.onsuccess = function (e) {
+        let db = e.target.result;
+        let tx = db.transaction('myStore', 'readwrite');
+        let store = tx.objectStore('myStore');
+        let request = store.add({id: 1, name: 'John'});
+        request.onsuccess = function (e) {
+            console.log('Added!');
+        }
+    }
+</script>
+</body>
+</html>
