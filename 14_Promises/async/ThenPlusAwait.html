@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script>
+
+    fetch('https://jsonplaceholder.typicode.com/posts/1')
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(error => console.error(error))
+
+
+    fetch('https://jsonplaceholder.typicode.com/posts/1')
+        .then(async response => {
+            let data = await response.json()
+            console.log(data)
+
+            // throw new Error("Error!")
+        })
+        .catch(error => console.error(error))
+
+</script>
+
+</body>
+</html>

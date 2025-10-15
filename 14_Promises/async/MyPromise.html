@@ -33,6 +33,19 @@
             document.getElementById("startVisitPage").innerHTML = error;
         })
 
+    async function f() {
+        try {
+            let a = await getStartedTime;
+            console.log("After await" + a);
+        }
+        catch (error) {
+            console.error("Catch await");
+            console.error(error);
+        }
+    }
+
+    f();
+
 
     // Promise
     // resolve - переменная, которая будет возвращатсья из промиса в then
