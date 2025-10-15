@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Собственный Promise: then и await, обработка ошибок</title>
+</head>
+<body>
+<h2>Собственный Promise (упрощённая реализация) + примеры then/await</h2>
+<p>Откройте консоль браузера (F12), чтобы увидеть логи.</p>
+
+<script>
+    // =============================================
+    // 1) Минимальный собственный "Promise" (MyPromise)
+    // =============================================
+    // Задачи, которые мы решаем:
+    // - хранение состояния: pending | fulfilled | rejected
+    // - методы: then, catch, finally
+    // - асинхронный переход состояний (через очередь макрозадач setTimeout)
+    // - чейнинг: then возвращает НОВЫЙ MyPromise
+    // - "адаптация" thenable-объектов (если обработчик возвращает Promise/thenable)
+
+    class MyPromise {
+        constructor(executor) {
+            this._state = 'pending';      // текущее состояние
+            this._value = undefined;      // значение/ошибка
+            this._handlers = [];          // очереди обработчиков для then/catch
+
+            const resolve = (value) => this._transition('fulfilled', value);
+            const reject  = (reason) => this._transition('rejected', reason);
+
+            try {
+                executor(resolve, reject);
+            } catch (err) {
+                reject(err);
+            }
+        }
+
+        // Перевод в новое состояние с асинхронным запуском обработчиков
+        _transition(newState, value) {
+            if (this._state !== 'pending') return; // состояние можно поменять только один раз
+            this._state = newState;
+            this._value = value;
+            // Имитируем асинхронность, как у нативного Promise (микрозадачи),
+            // здесь для простоты используем setTimeout(..., 0)
+            setTimeout(() => this._runHandlers(), 0);
+        }
+
+        _runHandlers() {
+            if (this._state === 'pending') return;
+            // Скопируем и очистим очередь, чтобы then, добавленные в обработчике,
+            // не были выполнены в той же итерации
+            const handlers = this._handlers.slice();
+            this._handlers.length = 0;
+
+            for (const h of handlers) {
+                const cb = this._state === 'fulfilled' ? h.onFulfilled : h.onRejected;
+                if (!cb) {
+                    // Если обработчик не задан, просто пробрасываем значение дальше
+                    if (this._state === 'fulfilled') h.resolve(this._value);
+                    else h.reject(this._value);
+                    continue;
+                }
+                try {
+                    const result = cb(this._value);
+                    // Если обработчик вернул thenable/Promise — "адаптируем" его
+                    this._resolveWithThenable(h.resolve, h.reject, result);
+                } catch (err) {
+                    h.reject(err);
+                }
+            }
+        }
+
+        _resolveWithThenable(resolve, reject, x) {
+            // Защита от самоссылки: promise = promise.then(() => promise)
+            if (x === this) {
+                reject(new TypeError('Циклическая ссылка в then'));
+                return;
+            }
+            // Если x — MyPromise/Promise/thenable
+            if (x && (typeof x === 'object' || typeof x === 'function')) {
+                let then;
+                try {
+                    then = x.then;
+                } catch (err) {
+                    reject(err);
+                    return;
+                }
+                if (typeof then === 'function') {
+                    // Вызываем then у thenable-объекта
+                    try {
+                        then.call(x, resolve, reject);
+                    } catch (err) {
+                        reject(err);
+                    }
+                    return;
+                }
+            }
+            // Обычное значение
+            resolve(x);
+        }
+
+        then(onFulfilled, onRejected) {
+            return new MyPromise((resolve, reject) => {
+                this._handlers.push({ onFulfilled, onRejected, resolve, reject });
+                // Если состояние уже стабильно — запустим обработчики асинхронно
+                if (this._state !== 'pending') {
+                    setTimeout(() => this._runHandlers(), 0);
+                }
+            });
+        }
+
+        catch(onRejected) {
+            return this.then(undefined, onRejected);
+        }
+
+        finally(onFinally) {
+            // finally не меняет значение/ошибку, просто запускает колбэк
+            return this.then(
+                (v) => MyPromise.resolve(onFinally?.()).then(() => v),
+                (e) => MyPromise.resolve(onFinally?.()).then(() => { throw e; })
+            );
+        }
+
+        // Статические хелперы
+        static resolve(value) {
+            if (value instanceof MyPromise) return value;
+            return new MyPromise((res) => res(value));
+        }
+
+        static reject(reason) {
+            return new MyPromise((_, rej) => rej(reason));
+        }
+    }
+
+    // =============================================
+    // 2) Примеры использования: then, catch, finally
+    // =============================================
+
+    // Успешный сценарий
+    const p1 = new MyPromise((resolve) => {
+        setTimeout(() => resolve('Шаг 1: успех'), 500);
+    });
+
+    p1
+      .then((msg) => {
+          console.log(msg);
+          return 'Шаг 2: тоже успех';
+      })
+      .then((msg2) => {
+          console.log(msg2);
+          // Вернём нативный Promise — наш MyPromise его "адаптирует"
+          return new Promise((res) => setTimeout(() => res('Шаг 3: нативный Promise'), 300));
+      })
+      .then((msg3) => {
+          console.log(msg3);
+      })
+      .catch((err) => {
+          // сюда мы не попадём в данном сценарии
+          console.error('Ошибка:', err);
+      })
+      .finally(() => {
+          console.log('finally для p1 — выполнится всегда');
+      });
+
+    // Сценарий с ошибкой
+    const p2 = new MyPromise((resolve, reject) => {
+        setTimeout(() => reject(new Error('Что-то пошло не так')), 400);
+    });
+
+    p2
+      .then(() => {
+          console.log('Этот then не вызовется, т.к. p2 будет отклонён');
+      })
+      .catch((err) => {
+          // Обработчик ошибок (через catch или второй аргумент then)
+          console.warn('Поймали ошибку из p2:', err.message);
+          // Можно восстановиться и вернуть значение, тогда цепочка продолжится как успешная
+          return 'Восстановились после ошибки';
+      })
+      .then((msg) => {
+          console.log('После catch:', msg);
+      })
+      .finally(() => {
+          console.log('finally для p2 — выполнится и при ошибке, и при успехе');
+      });
+
+    // =============================================
+    // 3) Синтаксис await/async и обработка ошибок через try/catch
+    // =============================================
+    // Важно: оператор await умеет "ждать" любой thenable-объект (с методом then),
+    //        поэтому наш MyPromise тоже можно await-ить.
+
+    async function demoAwait() {
+        try {
+            const a = await new MyPromise((res) => setTimeout(() => res('await: из MyPromise'), 200));
+            console.log(a);
+
+            const b = await new Promise((res) => setTimeout(() => res('await: из нативного Promise'), 200));
+            console.log(b);
+
+            // Пример с ошибкой — перехватываем try/catch
+            const c = await new MyPromise((_, rej) => setTimeout(() => rej(new Error('await: ошибка')), 250));
+            console.log('Не выполнится:', c);
+        } catch (e) {
+            console.error('try/catch поймал:', e.message || e);
+        } finally {
+            console.log('finally в async-функции — выполнится всегда');
+        }
+    }
+
+    demoAwait();
+
+    // =============================================
+    // 4) Альтернативная обработка ошибок через then(onFulfilled, onRejected)
+    // =============================================
+
+    new MyPromise((res, rej) => setTimeout(() => rej('ошибка через второй аргумент then'), 350))
+        .then(
+            (v) => console.log('Успех:', v),
+            (e) => console.warn('Обработчик ошибки во втором аргументе then:', e)
+        );
+
+    // Подсказки:
+    // - then(onFulfilled, onRejected) — обработка успеха/ошибки по отдельности.
+    // - catch(onRejected) — то же самое, что then(undefined, onRejected).
+    // - finally(onFinally) — всегда вызывается, не меняя итоговое значение/ошибку.
+</script>
+</body>
+</html>

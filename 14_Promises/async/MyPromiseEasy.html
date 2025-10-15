@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Простой собственный промис (объяснение)</title>
+</head>
+<body>
+<h2>Простой собственный промис (учебная версия)</h2>
+<p>Откройте консоль браузера (F12), чтобы увидеть пояснения и результаты.</p>
+
+<script>
+    // =============================================
+    // Простой «собственный промис» — учебная версия
+    // =============================================
+    // Что мы реализуем:
+    // - Состояния: pending (ожидание) → fulfilled (успех) или rejected (ошибка)
+    // - Конструктор принимает executor(resolve, reject)
+    // - then(onFulfilled, onRejected) — регистрация обработчиков
+    // - catch(onRejected) — сахар для then(undefined, onRejected)
+    // Упрощения в этой EASY‑версии:
+    // - Нет полноценного чейнинга: then НЕ возвращает новый промис.
+    // - Вызываем обработчики асинхронно (через setTimeout), чтобы быть ближе к поведению Promise.
+
+    class SimplePromise {
+        constructor(executor) {
+            this._state = 'pending';  // текущее состояние
+            this._value = undefined;  // результат или причина ошибки
+
+            // Храним ОДИН набор обработчиков (для простоты):
+            this._onFulfilled = null;
+            this._onRejected = null;
+
+            const resolve = (value) => this._transition('fulfilled', value);
+            const reject  = (reason) => this._transition('rejected', reason);
+
+            try {
+                // executor может бросить исключение — считаем это отклонением
+                executor(resolve, reject);
+            } catch (err) {
+                reject(err);
+            }
+        }
+
+        _transition(newState, value) {
+            if (this._state !== 'pending') return; // состояние меняется только один раз
+            this._state = newState;
+            this._value = value;
+            // Вызываем обработчики не сразу, а в следующем «тике»
+            setTimeout(() => this._runHandler(), 0);
+        }
+
+        _runHandler() {
+            if (this._state === 'fulfilled') {
+                if (typeof this._onFulfilled === 'function') {
+                    try {
+                        this._onFulfilled(this._value);
+                    } catch (e) {
+                        console.error('Ошибка в onFulfilled:', e);
+                    }
+                }
+            } else if (this._state === 'rejected') {
+                if (typeof this._onRejected === 'function') {
+                    try {
+                        this._onRejected(this._value);
+                    } catch (e) {
+                        console.error('Ошибка в onRejected:', e);
+                    }
+                } else {
+                    // Если обработчик ошибки не задан — подсветим в консоли
+                    console.warn('SimplePromise: необработанное отклонение:', this._value);
+                }
+            }
+        }
+
+        // then(onFulfilled, onRejected): регистрируем обработчики.
+        // В этой простой версии мы НЕ создаём новый промис и НЕ поддерживаем чейнинг.
+        then(onFulfilled, onRejected) {
+            this._onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null;
+            this._onRejected  = typeof onRejected  === 'function' ? onRejected  : null;
+
+            // Если состояние уже определилось до вызова then — запускаем обработчик асинхронно
+            if (this._state !== 'pending') {
+                setTimeout(() => this._runHandler(), 0);
+            }
+        }
+
+        catch(onRejected) {
+            return this.then(undefined, onRejected);
+        }
+    }
+
+    // =====================
+    // Примеры использования
+    // =====================
+
+    console.log('— Пример 1: успешный SimplePromise —');
+    const ok = new SimplePromise((resolve, reject) => {
+        // Имитируем асинхронную работу
+        setTimeout(() => resolve('Готово! Данные пришли.'), 300);
+    });
+
+    ok.then(
+        // onFulfilled — сработает при успехе
+        (value) => {
+            console.log('Успех:', value);
+        },
+        // onRejected — сработал бы при ошибке (здесь не произойдёт)
+        (err) => {
+            console.error('Ошибка (не ожидается):', err);
+        }
+    );
+
+    console.log('— Пример 2: отклонённый SimplePromise —');
+    const bad = new SimplePromise((resolve, reject) => {
+        setTimeout(() => reject(new Error('Что-то пошло не так')), 400);
+    });
+
+    // Можно обрабатывать ошибку вторым параметром then...
+    bad.then(
+        undefined,
+        (error) => {
+            console.warn('Поймали ошибку через then:', error.message);
+        }
+    );
+
+    // ...или через catch (эквивалент then(undefined, onRejected))
+    const bad2 = new SimplePromise((resolve, reject) => {
+        setTimeout(() => reject('Ошибка как строка'), 500);
+    });
+
+    bad2.catch((e) => console.warn('Поймали ошибку через catch:', e));
+
+    // Краткие выводы:
+    // - Конструктор получает executor, который сам решает — вызывать resolve или reject.
+    // - then регистрирует обработчики, которые вызовутся асинхронно после смены состояния.
+    // - В этой простой версии нет возврата нового промиса и цепочек then.
+    //   За полноценной реализацией смотрите MyPromise.html (расширенная версия).
+</script>
+</body>
+</html>

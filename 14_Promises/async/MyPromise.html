@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div id="dashboard">
+    <span id="startVisitPage"></span>
+</div>
+
+
+<script>
+
+
+    let getStartedTime = new Promise((resolve, reject) => {
+        let startedTime = sessionStorage.getItem("startedTime");
+        if (startedTime) {
+            resolve(startedTime);
+        } else {
+            reject('Not started yet')
+        }
+    })
+
+    getStartedTime
+        .then(time => {
+            console.log(time);
+            document.getElementById("startVisitPage").innerHTML = time;
+        })
+        .catch(error => {
+            console.error(error);
+            document.getElementById("startVisitPage").innerHTML = error;
+        })
+
+
+    // Promise
+    // resolve - переменная, которая будет возвращатсья из промиса в then
+    // reject - возвращает промис в зону catch
+    let promise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            reject("Hello World! - Promise");
+        }, 2000);
+    });
+
+    promise
+        .then(value => {
+            console.log('Catch from Promise: ' + value);
+        })
+        .catch(error => {
+            console.log('Catch from Promise: ' + error);
+        })
+</script>
+</body>
+</html>
