@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<div id="dashboard">
+    <span id="startVisitPage"></span>
+    <button id="cmdClear"> Clear </button>
+</div>
+
+<script>
+    let startVisitPageElement = document.getElementById('startVisitPage');
+
+    document.getElementById('cmdClear').addEventListener('click', function () {
+        localStorage.clear();
+        localStorage.removeItem( 'startVisitPage');
+        startVisitPageElement.innerHTML = '';
+    })
+
+    let user = {
+        name: 'John',
+        age: 25,
+        city: 'New York'
+    }
+
+    sessionStorage.setItem('user', JSON.stringify(user));
+
+    let restoredUser = JSON.parse(sessionStorage.getItem('user'));
+    console.log(restoredUser);
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // startVisitPageElement.innerHTML = now.toLocaleString();
+
+        let startVisitPage = localStorage.getItem('startVisitPage');
+        let sess = sessionStorage.getItem('ses');
+        if (startVisitPage) {
+            startVisitPageElement.innerHTML = sess + ' - ' + startVisitPage;
+        } else {
+            let now = new Date();
+            sessionStorage.setItem('ses', now.toLocaleString());
+            startVisitPageElement.innerHTML = now.toLocaleString();
+            localStorage.setItem('startVisitPage', now.toLocaleString());
+        }
+    })
+</script>
+
+</body>
+</html>
