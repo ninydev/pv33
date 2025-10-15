@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Cookies: все параметры</title>
+</head>
+<body>
+<h2>Демонстрация установки cookie со всеми параметрами</h2>
+<p>Смотрите вывод в консоли браузера (F12).</p>
+<script>
+    // Универсальная функция установки cookie
+    // Пример использования:
+    // setCookie('user', 'John', { path: '/', 'max-age': 3600, samesite: 'Lax', secure: true });
+    function setCookie(name, value, options = {}) {
+        if (!name) return;
+
+        // Кодируем имя и значение (RFC 6265 рекомендует безопасные символы)
+        const encodedName = encodeURIComponent(String(name));
+        const encodedValue = encodeURIComponent(String(value));
+
+        let cookieStr = `${encodedName}=${encodedValue}`;
+
+        // Обрабатываем поддерживаемые опции
+        // expires: Date или число дней
+        if (options.expires) {
+            let expiresVal = options.expires;
+            if (typeof expiresVal === 'number') {
+                // интерпретируем как количество дней
+                const d = new Date();
+                d.setTime(d.getTime() + expiresVal * 24 * 60 * 60 * 1000);
+                expiresVal = d;
+            }
+            if (expiresVal instanceof Date) {
+                cookieStr += `; Expires=${expiresVal.toUTCString()}`;
+            }
+        }
+
+        // max-age: секунды (приоритетнее Expires)
+        if (options['max-age'] != null) {
+            const maxAge = Number(options['max-age']);
+            if (!Number.isNaN(maxAge)) cookieStr += `; Max-Age=${Math.floor(maxAge)}`;
+        }
+
+        // path
+        if (options.path) {
+            cookieStr += `; Path=${options.path}`;
+        }
+
+        // domain (работает только в рамках текущего домена/поддомена;
+        // нельзя поставить cookie на чужой домен)
+        if (options.domain) {
+            cookieStr += `; Domain=${options.domain}`;
+        }
+
+        // secure (только по HTTPS). На http:// cookie с Secure обычно не установится
+        if (options.secure) {
+            cookieStr += '; Secure';
+        }
+
+        // SameSite=Lax|Strict|None
+        if (options.samesite) {
+            const val = String(options.samesite).toLowerCase();
+            if (val === 'lax') cookieStr += '; SameSite=Lax';
+            else if (val === 'strict') cookieStr += '; SameSite=Strict';
+            else if (val === 'none') cookieStr += '; SameSite=None'; // требует Secure
+        }
+
+        // HttpOnly НЕЛЬЗЯ установить из JavaScript — только на стороне сервера в заголовке Set-Cookie.
+
+        document.cookie = cookieStr;
+    }
+
+    // Вспомогательная функция удаления cookie (Max-Age=0)
+    function deleteCookie(name, options = {}) {
+        setCookie(name, '', { 'max-age': 0, path: options.path || '/' });
+    }
+
+    // Выводим начальные cookie
+    console.log('Начальные document.cookie:', document.cookie);
+
+    // Примеры установки cookie со всеми параметрами
+    // 1) Простая cookie
+    setCookie('name', 'John Doe');
+
+    // 2) Срок жизни через Expires (через 7 дней от текущего момента)
+    const expiresDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    setCookie('session_id', 'abc123', { expires: expiresDate, path: '/' });
+
+    // 3) Срок жизни через Max-Age (3600 секунд = 1 час)
+    setCookie('age', 30, { 'max-age': 3600, path: '/' });
+
+    // 4) Path — ограничение пути
+    setCookie('city', 'New York', { path: '/' });
+
+    // 5) Domain — для текущего домена/поддомена (на localhost и file:// поведение ограничено)
+    // Задавать домен имеет смысл только если страница доступна по доменному имени.
+    // Пример (РАБОТАЕТ, если вы на поддомене и домен позволяет):
+    // setCookie('domain_cookie', '1', { domain: location.hostname, path: '/' });
+
+    // 6) Secure — cookie отправляется только по HTTPS
+    // На незащищённом соединении браузер может проигнорировать такую cookie
+    setCookie('secure_demo', 'yes', { secure: true, samesite: 'Lax', path: '/' });
+
+    // 7) SameSite
+    setCookie('samesite_lax', '1', { samesite: 'Lax', path: '/' });
+    setCookie('samesite_strict', '1', { samesite: 'Strict', path: '/' });
+    // Для SameSite=None по стандарту требуется Secure
+    setCookie('samesite_none', '1', { samesite: 'None', secure: true, path: '/' });
+
+    // 8) Удаление cookie (пример)
+    // deleteCookie('age');
+
+    // Итоговый вывод cookie в консоль
+    console.log('Текущие document.cookie:', document.cookie);
+
+    // Разбор cookie в объект для удобства
+    function parseCookies() {
+        return document.cookie.split(';').reduce((acc, pair) => {
+            const [rawName, ...rest] = pair.trim().split('=');
+            const name = decodeURIComponent(rawName || '');
+            const value = decodeURIComponent(rest.join('=') || '');
+            if (name) acc[name] = value;
+            return acc;
+        }, {});
+    }
+
+    console.log('Разобранные cookie:', parseCookies());
+
+    // Пояснение:
+    // - HttpOnly нельзя выставить из JS (только сервером в заголовке Set-Cookie)
+    // - Domain нельзя установить на чужой домен
+    // - Secure и SameSite=None требуют HTTPS
+</script>
+</body>
+</html>
