@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        ul {
+            list-style: none;
+        }
+
+        form ul li label input {
+            margin-bottom: 10px;
+        }
+
+
+
+    </style>
+</head>
+<body>
+
+<div style="border: 1px solid black;
+    border-radius: 10px;
+    padding: 5px;
+    width: fit-content;
+    margin: auto;">
+    <form name = "formSetSearch" method = "get">
+        <ul style="padding: 10px; margin: 0;">
+            <li>
+                <label>Title:
+                    <input id="SearchTitle" type="text">
+                </label>
+            </li>
+            <li>
+                <label>Type:
+                    <select id="SelectType">
+                        <option>movie</option>
+                        <option>series</option>
+                        <option>episode</option>
+                    </select>
+                </label>
+            </li>
+
+        </ul>
+        <input style="width: -webkit-fill-available;" value="SearchBtn"  type="submit" >
+    </form>
+</div>
+<div>
+    <p>Films</p>
+</div>
+<div>
+    <ul id="OutSearch" style="padding: 0px; margin: 0; display: flex;;background-color: antiquewhite;">
+
+    </ul>
+</div>
+<div id="Details">
+</div>
+<form id="Select position">
+    <input type="submit"  name="Left" value="<<">
+    <input type="submit"  name="Right" value=">>">
+</form>
+<script>
+    // Краще називати змінні з префіксом frm для форм, btn для кнопок, inp для інпутів і т.д.
+    // Це покращує читабельність коду.
+    // Такой стиль має назву "convention over configuration".
+    // Yes — that's essentially a Hungarian-style naming convention (prefixes encoding the role/type).
+    // Traditional Hungarian notation encoded data types or semantics; using frm, btn, inp for UI elements
+    // is a common, lightweight "UI prefix" convention (Hungarian-like).
+    const frmSearch = document.forms['formSetSearch'];
+
+    const btnDetals = document.getElementById['getDETAILS'];
+
+
+    const API_KEY = '53cc027b';
+    const BASE_API_URL = `http://www.omdbapi.com/?apikey=${API_KEY}`;
+    const BASE_IMG_URL = `http://img.omdbapi.com/?apikey=${API_KEY}`;
+
+    // const searchTitle = document.getElementById("SearchTitle");
+    // searchTitle.value => search;
+
+
+    /**
+     * Функція для отримання фільмів за назвою
+     */
+    function getMovie() {
+        let url;
+        let search = document.getElementById("SearchTitle").value;
+
+        if (search !== "") {
+            url = `${BASE_API_URL}&s=${search}`;
+        }
+        else {
+            alert("Please enter a search term");
+            return;
+        }
+        fetch(url)
+            // Краще перевіряти response.ok і викидати помилку, якщо відповідь не ок
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                console.log(data.Search);
+
+                // Очищати попередні результати перед виводом нових
+                document.getElementById('OutSearch').innerHTML = '';
+
+                // Перевіряти, що там щось взагалі є - и то массив
+                data.Search.forEach((item) => {
+                    let html = `
+                        <li style="margin: auto; display: flex">
+                        <img style="width: 160px;height: 236px;" src="${item.Poster}" alt="${item.Title}">
+                            <ul>
+
+                                <p> ${item.Type}</p>
+                                <h2>${item.Title}</h2>
+                                <p>${item.Year}</p>
+                                <button  class="btnDetails" onclick="getDetails(event)"
+                              data-imdbID="${item.imdbID}" data-title="${item.Title}">
+                                Details
+                                </button>
+                            </ul>
+
+
+                        </li>
+                        `
+                    document.getElementById('OutSearch').innerHTML += html;
+                })
+
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
+
+
+    /**
+     * Отримання деталей фільму
+     * @param ev
+     */
+
+    function getDetails(ev)
+    {
+        console.log(ev);
+        let imdbID = ev.target.getAttribute('data-imdbID');
+        let title = ev.target.getAttribute('data-title');
+        let url = `${BASE_API_URL}&i=${imdbID}`;
+
+        document.getElementById('OutSearch').innerHTML
+            = "<h1>Get Details for " + title + " " + imdbID + "</h1>";
+
+        fetch(url)
+            .then(response => response.json())
+            .then(film => {
+                console.log(film)
+            })
+            .catch(error => {console.error(error)})
+
+
+
+    }
+
+
+
+    frmSearch.onsubmit = function (ev) {
+        ev.preventDefault();
+        getMovie()
+        return false
+    }
+
+
+</script>
+</body>
+</html>
