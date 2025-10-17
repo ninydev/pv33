@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пошук фільмів</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <section id="heroBanner" class="hero-banner">
+        <div class="hero-content">
+            <h2>Ітогова робота - Ганчо Тимур</h2>
+            <p>Веб-додаток для пошуку фільмів з використанням OMDb API</p>
+        </div>
+        <span id="closeBanner" class="close-btn">&times;</span>
+    </section>
+    <div class="container">
+        <header>
+            <h1>Пошук:</h1>
+            <div class="search-box">
+                <form id="searchForm">
+                    <div class="form-group">
+                        <label for="title">Назва:</label>
+                        <input type="text" id="title" placeholder="наприклад, Batman" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Тип:</label>
+                        <select id="type">
+                            <option value="movie">Фільм</option>
+                            <option value="series">Серіал</option>
+                            <option value="episode">Епізод</option>
+                        </select>
+                    </div>
+                    <button type="submit">Пошук</button>
+                </form>
+            </div>
+        </header>
+
+        <main>
+            <div id="message-center" class="message-center hidden"></div>
+            
+            <h2 id="filmsHeader" class="hidden">Фільми:</h2>
+            <div id="results"></div>
+            <div id="pagination"></div>
+
+            <h2 id="infoHeader" class="hidden">Інформація:</h2>
+
+        </main>
+    </div>
+    <div id="details"></div>
+    <script src="script.js"></script>
+</body>
+</html>
